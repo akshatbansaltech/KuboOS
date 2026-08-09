@@ -395,24 +395,6 @@
   #termin .ps { color: var(--lime); white-space: nowrap; }
   #termin input { flex: 1; background: transparent; border: none; outline: none; color: var(--txt); font-family: var(--mono); font-size: 12.5px; caret-color: var(--lime); }
 
-  /* ---------- app: devlog ---------- */
-  .dl { padding: 14px 16px; display: flex; flex-direction: column; gap: 12px; }
-  .dlog {
-    background: rgba(8, 12, 20, 0.55); border: 1px solid var(--line); border-radius: 12px; padding: 13px 15px;
-    transition: border-color .15s;
-  }
-  .dlog:hover { border-color: rgba(198, 255, 77, 0.3); }
-  .dlog .h { display: flex; align-items: baseline; gap: 10px; margin-bottom: 7px; flex-wrap: wrap; }
-  .dlog .v {
-    color: var(--lime); font-family: var(--mono); font-weight: 700; font-size: 11px; letter-spacing: 1.5px;
-    background: rgba(198, 255, 77, 0.1); padding: 2px 8px; border-radius: 6px; border: 1px solid rgba(198, 255, 77, 0.25);
-  }
-  .dlog .dt { color: var(--dim); font-size: 10.5px; font-family: var(--mono); }
-  .dlog .t { font-weight: 700; font-size: 14px; }
-  .dlog ul { padding-left: 18px; font-size: 12.5px; line-height: 1.8; color: var(--dim); }
-  .dlog ul b { color: var(--txt); }
-  .dlog ul li::marker { color: var(--cyan); }
-
   /* ---------- app: about ---------- */
   .about { padding: 20px 22px; display: flex; flex-direction: column; gap: 12px; align-items: flex-start; }
   .about .big {
@@ -453,7 +435,7 @@
 <div id="startmenu">
   <div id="smhead">
     <span class="cube">K</span>
-    <div><div class="who" id="smwho">hey, there</div><div class="sub">kubo os · v1.2</div></div>
+    <div><div class="who" id="smwho">hey, there</div><div class="sub">kubo os · v1.3</div></div>
   </div>
   <div id="smgrid"></div>
   <div id="smfoot">no password. no rules. all vibes.</div>
@@ -467,7 +449,7 @@
   <div class="card">
     <div class="lgo">K</div>
     <div class="big">KUBO//OS</div>
-    <span class="ver">v1.2 · web os by akshat</span>
+    <span class="ver">v1.3 · web os by akshat</span>
     <div class="msg" id="lockmsg">this isn't a password. it's a name tag.<br>what should we call you?</div>
     <input id="lockname" placeholder="your name" maxlength="24">
     <button id="lockgo">enter</button>
@@ -491,7 +473,6 @@
     notes: "linear-gradient(135deg,#c6ff4d,#2fd6a5)",
     calc:  "linear-gradient(135deg,#3ee0f5,#5b7cfa)",
     term:  "linear-gradient(135deg,#9b8cff,#5b7cfa)",
-    devlog:"linear-gradient(135deg,#ff5d8f,#ff8f6b)",
     about: "linear-gradient(135deg,#5b7cfa,#c86bff)"
   };
 
@@ -500,7 +481,6 @@
     { id: "notes",  name: "Notes",    icon: "NT", w: 460, h: 420, f: appNotes },
     { id: "calc",   name: "Calculator", icon: "CA", w: 300, h: 440, f: appCalc },
     { id: "term",   name: "Terminal", icon: "TR", w: 560, h: 380, f: appTerm },
-    { id: "devlog", name: "Devlog",   icon: "DL", w: 540, h: 520, f: appDevlog },
     { id: "about",  name: "About",    icon: "AB", w: 420, h: 430, f: appAbout }
   ];
 
@@ -563,7 +543,7 @@
     var btnMax = document.createElement("button");
     btnMax.className = "tb-btn"; btnMax.innerHTML = "▢"; btnMax.title = "maximize (double-click bar)";
     var btnMin = document.createElement("button");
-    btnMin.className = "tb-btn"; btnMin.innerHTML = "—"; btnMin.title = "minimize";
+    btnMin.className = "tb-btn"; btnMin.innerHTML = "&minus;"; btnMin.title = "minimize";
     var btnClose = document.createElement("button");
     btnClose.className = "tb-btn close"; btnClose.innerHTML = "✕"; btnClose.title = "close";
     tbar.appendChild(btnMin); tbar.appendChild(btnMax); tbar.appendChild(btnClose);
@@ -819,17 +799,16 @@
     var h = new Date().getHours();
     var greet = h < 5 ? "up late, " + storedName + "?" : h < 12 ? "good morning, " + storedName : h < 17 ? "good afternoon, " + storedName : h < 21 ? "good evening, " + storedName : "good night, " + storedName;
     body.innerHTML = '<div class="hello">' +
-      '<div class="hero"><div class="greet">' + greet + '</div><div class="sub">i built this os by hand — one html file, zero frameworks, and a questionable amount of 3am energy. windows drag, apps open, the terminal actually works. it is yours now. go poke around and break something.</div></div>' +
+      '<div class="hero"><div class="greet">' + greet + '</div><div class="sub">i built this os by hand. one html file, zero frameworks, and a questionable amount of 3am energy. windows drag, apps open, the terminal actually works. it is yours now. go poke around and break something.</div></div>' +
       '<div class="tips">' +
-        '<div class="tip"><b>drag everything</b>windows move from the top bar. throw one at the top edge and it snaps full screen — double-clicking the bar does the same.<br><span class="k">tip: double-click a titlebar</span></div>' +
+        '<div class="tip"><b>drag everything</b>windows move from the top bar. throw one at the top edge and it snaps full screen. double-clicking the bar does the same.<br><span class="k">tip: double-click a titlebar</span></div>' +
         '<div class="tip"><b>the terminal talks back</b>type <span class="k">neofetch</span>, <span class="k">sudo</span> or <span class="k">joke</span> and see what happens.</div>' +
-        '<div class="tip"><b>notes save themselves</b>type anything, close the window, come back later — still there. no save button, no panic.</div>' +
+        '<div class="tip"><b>notes save themselves</b>type anything, close the window, come back later. still there. no save button, no panic.</div>' +
         '<div class="tip"><b>no password, remember?</b>the lockscreen only asks your name so the os can say hi back. that is the whole login system.</div>' +
       '</div>' +
-      '<div class="acts"><button class="glow" id="w-term">open terminal</button><button id="w-dl">read the devlog</button></div>' +
-      '<div class="foot">kubo os v1.2 · made by akshat</div></div>';
+      '<div class="acts"><button class="glow" id="w-term">open terminal</button></div>' +
+      '<div class="foot">kubo os v1.3 · made by akshat</div></div>';
     body.querySelector("#w-term").onclick = function () { openApp("term"); };
-    body.querySelector("#w-dl").onclick = function () { openApp("devlog"); };
   }
 
   /* ============ app: notes ============ */
@@ -921,7 +900,7 @@
       '<span class="ps">kubo@aksh:~$</span><input id="termcmd" autocomplete="off" spellcheck="false" placeholder="type help"></div></div>';
     var out = body.querySelector("#termout");
     var inp = body.querySelector("#termcmd");
-    var BANNER = '<span class="green">KUBO//OS v1.2</span> <span class="dim">| the web os akshat built</span>\nthis terminal actually works. type <span class="cyan">help</span>';
+    var BANNER = '<span class="green">KUBO//OS v1.3</span> <span class="dim">| the web os akshat built</span>\nthis terminal actually works. type <span class="cyan">help</span>';
     print(BANNER);
     function print(html) {
       var d = document.createElement("div");
@@ -943,10 +922,10 @@
         case "help":
           print("commands: <span class='cyan'>help, neofetch, whoami, hi, joke, date, echo, open, clear, sudo, banner</span>");
           break;
-        case "whoami": print("you are " + storedName + " — and you are running an os built from one html file. respect."); break;
+        case "whoami": print("you are " + storedName + ". and you are running an os built from one html file. respect."); break;
         case "hi":
         case "hey":
-        case "hello": print("hey " + storedName + ". drink some water. stretch. this os won't run itself — well, actually it does, but still."); break;
+        case "hello": print("hey " + storedName + ". drink some water. stretch. this os won't run itself. well, actually it does, but still."); break;
         case "joke": print("why did the developer go broke?\nbecause he used up all his <span class='gold'>cache</span>. ...i'll see myself out."); break;
         case "date": print(new Date().toString()); break;
         case "clear": out.innerHTML = ""; break;
@@ -956,56 +935,30 @@
         case "sudo": print("<span class='pink'>permission denied: this is a no-root os, like it should be. you already have everything.</span>"); break;
         case "open":
           var target = a[1] ? a[1].toLowerCase() : "";
-          if (target === "notes" || target === "calc" || target === "term" || target === "devlog" || target === "about" || target === "hello") {
+          if (target === "notes" || target === "calc" || target === "term" || target === "about" || target === "hello") {
             print("opening " + target + "..."); openApp(target);
-          } else print("usage: open [welcome|notes|calc|term|devlog|about]");
+          } else print("usage: open [welcome|notes|calc|term|about]");
           break;
         case "echo": print(a.slice(1).join(" ").replace(/</g, "&lt;") || " "); break;
         case "neofetch":
-          print('<span class="green">user</span>  ' + storedName + '\n<span class="green">os</span>    KuboOS 1.2 (web build)\n<span class="green">wm</span>    kubo-wm — drag, snap, resize, all vanilla\n<span class="green">shell</span> ksh 1.2\n<span class="green">uptime</span> since you unlocked\n<span class="green">apps</span>  6 — welcome, notes, calc, terminal, devlog, about\n<span class="green">kernel</span> 100% html + css + js, zero dependencies\n<span class="green">vibe</span>  immaculate');
+          print('<span class="green">user</span>  ' + storedName + '\n<span class="green">os</span>    KuboOS 1.3 (web build)\n<span class="green">wm</span>    kubo-wm: drag, snap, resize, all vanilla\n<span class="green">shell</span> ksh 1.3\n<span class="green">uptime</span> since you unlocked\n<span class="green">apps</span>  5. welcome, notes, calc, terminal, about\n<span class="green">kernel</span> 100% html + css + js, zero dependencies\n<span class="green">vibe</span>  immaculate');
           break;
         case "": break;
-        default: print("command not found: <span class='pink'>" + cmd.replace(/</g, "&lt;") + "</span> — try <span class='cyan'>help</span>");
+        default: print("command not found: <span class='pink'>" + cmd.replace(/</g, "&lt;") + "</span>. try <span class='cyan'>help</span>");
       }
       inp.focus();
     }
     setTimeout(function () { inp.focus(); }, 50);
   }
 
-  /* ============ app: devlog ============ */
-  function appDevlog(body) {
-    body.innerHTML = '<div class="app"><div class="appbar"><b>devlog</b> · ' + DEVLOGS.length + ' entries · progress as it happened</div><div class="dl"></div></div>';
-    var dl = body.querySelector(".dl");
-    DEVLOGS.forEach(function (e) {
-      var d = document.createElement("div");
-      d.className = "dlog";
-      d.innerHTML = '<div class="h"><span class="v">' + e.ver + "</span><span class=\"dt\">" + e.date + "</span><span class='t'>" + e.title + "</span></div><ul>" +
-        e.items.map(function (i) { return "<li>" + i + "</li>"; }).join("") + "</ul>";
-      dl.appendChild(d);
-    });
-  }
-
-  var DEVLOGS = [
-    { ver: "DEVLOG #1", date: "09 aug 2026", title: "skeleton + window manager",
-      items: ["repo init, html stub replaced with real structure", "drawn the desktop: dark cyberpunk wallpaper with grid + glow orbs, all pure css", "built kubo-wm: windows that drag, focus, minimize, maximize and close", "taskbar with running-app pills + live clock so it actually feels like an os"] },
-    { ver: "DEVLOG #2", date: "09 aug 2026", title: "the apps",
-      items: ["<b>notes</b> — scratchpad that autosaves to localStorage (survives refresh)", "<b>calculator</b> — fully working with ÷ × − + ( ) and %", "<b>terminal</b> — fake shell with real commands: help, neofetch, sudo (denied, obviously), open", "<b>devlog</b> — this app, progress displayed inside the os itself"] },
-    { ver: "DEVLOG #3", date: "09 aug 2026", title: "polish + extras beyond the guide",
-      items: ["boot sequence with animated loading bar that fades into the desktop", "start menu (K button) with app grid", "window <b>resizing</b> from the corner handle, double-click titlebar to maximize", "no password, no login — anyone who opens the page is in. exactly how the mission wanted it"] },
-    { ver: "DEVLOG #4", date: "09 aug 2026", title: "the humanise pass (v1.1)",
-      items: ["generated a proper <b>wallpaper</b> — aurora + city lights, with vignette and grid overlay", "<b>toast notifications</b> — \"note saved\", plus custom os-styled dialogs instead of browser confirm()", "windows <b>animate</b> in, snap to top edge to maximize, drag a maximized window down to restore", "calculator got <b>keyboard support</b> (type to calculate), terminal got joke, hi, kubo commands", "warmer palette, proper fonts, gradient app tiles, friendlier copy everywhere"] },
-    { ver: "DEVLOG #5", date: "09 aug 2026", title: "lockscreen + it stops sounding like a robot (v1.2)",
-      items: ["added a <b>lockscreen</b> — the os asks your name, stores it, and greets you with it", "your name shows up in the welcome app, the start menu, the terminal (whoami, neofetch) and the boot line", "killed every emoji, rewrote all the copy so it sounds like a person wrote it, not an ai", "returning users get a one-tap unlock: \"good to see you, [name]. no password, just hit enter.\""] }
-  ];
-
   /* ============ app: about ============ */
   function appAbout(body) {
     body.innerHTML = '<div class="about">' +
       '<div class="big">KUBO//OS</div>' +
-      '<span class="ver">v1.2 — a web os, built by akshat. zero frameworks, zero dependencies.</span>' +
-      '<p>this whole thing is <b>one html file</b>. the wallpaper, the window manager, the taskbar, every app — all hand-rolled in plain <b>html, css and vanilla javascript</b>. that was the whole point of the workshop: make it yourself, not install it.</p>' +
-      '<div class="tags"><span class="lm">lockscreen</span><span class="lm">draggable windows</span><span>snap-to-maximize</span><span>taskbar + clock</span><span>start menu</span><span>notes w/ autosave</span><span>working calculator</span><span>keyboard calc</span><span>terminal</span><span>devlog</span><span>toasts</span><span>custom dialogs</span><span>welcome app</span><span>boot sequence</span></div>' +
-      '<p>how to use: the lockscreen asks your name — that is the whole login system. click icons on the desktop (or the K button) to open apps. drag titlebars, resize from corners, double-click to maximize. try <b>neofetch</b> or <b>joke</b> in the terminal. no password anywhere. the os trusts you.</p></div>';
+      '<span class="ver">v1.3. a web os, built by akshat. zero frameworks, zero dependencies.</span>' +
+      '<p>this whole thing is <b>one html file</b>. the wallpaper, the window manager, the taskbar, every app. all hand-rolled in plain <b>html, css and vanilla javascript</b>. that was the whole point of the workshop: make it yourself, not install it.</p>' +
+      '<div class="tags"><span class="lm">lockscreen</span><span class="lm">draggable windows</span><span>snap-to-maximize</span><span>taskbar + clock</span><span>start menu</span><span>notes w/ autosave</span><span>working calculator</span><span>keyboard calc</span><span>terminal</span><span>toasts</span><span>custom dialogs</span><span>welcome app</span><span>boot sequence</span></div>' +
+      '<p>how to use: the lockscreen asks your name. that is the whole login system. click icons on the desktop (or the K button) to open apps. drag titlebars, resize from corners, double-click to maximize. try <b>neofetch</b> or <b>joke</b> in the terminal. no password anywhere. the os trusts you.</p></div>';
   }
 
   /* ============ resize handling ============ */
