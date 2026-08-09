@@ -1,6 +1,8 @@
 # KuboOS
 
-A web operating system built from scratch — one HTML file, zero frameworks, zero dependencies. Part of the "make your own OS" workshop mission.
+A web operating system built from scratch — one HTML file, zero frameworks, zero dependencies.
+
+**Live: https://akshatbansaltech.github.io/KuboOS/**
 
 ## Run it
 
