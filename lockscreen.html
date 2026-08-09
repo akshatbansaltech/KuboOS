@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>KuboOS</title>
+<style>
+  @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap");
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  :root {
+    --bg: #0e0c09;
+    --panel2: rgba(30, 25, 19, 0.92);
+    --line: rgba(255, 196, 140, 0.14);
+    --txt: #f4ecdd;
+    --dim: #a59880;
+    --amber: #ffa63d;
+    --gold: #f2c14e;
+    --ink: #1d1508;
+    --font: "Inter", "Segoe UI", system-ui, sans-serif;
+    --disp: "Space Grotesk", "Inter", "Segoe UI", sans-serif;
+    --mono: "Cascadia Code", Consolas, "Courier New", monospace;
+  }
+  html, body { height: 100%; }
+  body {
+    font-family: var(--font);
+    background: var(--bg);
+    color: var(--txt);
+    overflow: hidden;
+    user-select: none;
+    -webkit-user-select: none;
+  }
+  ::selection { background: var(--amber); color: var(--ink); }
+  #lock { position: fixed; inset: 0; z-index: 900; background: var(--bg); display: grid; place-items: center; }
+  #lock .lockbg {
+    position: absolute; inset: 0;
+    background: linear-gradient(rgba(6, 9, 16, 0.35), rgba(6, 9, 16, 0.65)), url("wallpaper.jpg") center / cover no-repeat;
+    filter: blur(6px) saturate(1.15); transform: scale(1.05);
+  }
+  #lock .card {
+    position: relative; z-index: 1; width: 350px; text-align: center;
+    background: var(--panel2); border: 1px solid var(--line); border-radius: 20px;
+    padding: 30px 28px 24px; box-shadow: 0 34px 90px rgba(0, 0, 0, 0.7);
+    animation: pop 0.3s ease-out;
+  }
+  @keyframes pop { from { opacity: 0; transform: translateY(16px) scale(0.97); } to { opacity: 1; transform: none; } }
+  #lock .lgo {
+    width: 56px; height: 56px; border-radius: 16px; margin: 0 auto 14px;
+    display: grid; place-items: center; font-family: var(--mono); font-weight: 800; font-size: 22px; color: var(--ink);
+    background: linear-gradient(135deg, var(--amber), var(--gold));
+    box-shadow: 0 8px 24px rgba(255, 166, 61, 0.25);
+  }
+  #lock .big {
+    font-family: var(--disp); font-size: 40px; font-weight: 700; letter-spacing: 2px; margin-bottom: 4px;
+    background: linear-gradient(90deg, var(--amber), var(--gold));
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+  }
+  #lock .ver { font-size: 10px; color: var(--dim); font-family: var(--mono); letter-spacing: 2px; display: block; margin-bottom: 22px; }
+  #lock .msg { font-size: 13px; color: var(--dim); line-height: 1.6; margin-bottom: 16px; }
+  #lock .msg b { color: var(--txt); }
+  #lock input {
+    width: 100%; background: rgba(14, 12, 9, 0.7); border: 1px solid var(--line); border-radius: 11px;
+    padding: 12px 14px; color: var(--txt); font-size: 15px; font-weight: 700; text-align: center;
+    outline: none; font-family: var(--font); margin-bottom: 12px;
+  }
+  #lock input:focus { border-color: rgba(255, 166, 61, 0.5); }
+  #lock button {
+    width: 100%; border: none; border-radius: 11px; padding: 12px; cursor: pointer;
+    background: linear-gradient(135deg, var(--amber), var(--gold)); color: var(--ink);
+    font-size: 14px; font-weight: 800; font-family: var(--font);
+    transition: transform .08s, filter .1s;
+  }
+  #lock button:hover { transform: translateY(-1px); filter: brightness(1.06); }
+  #lock button:active { transform: scale(0.97); }
+  #lock .chg {
+    margin-top: 14px; font-size: 11px; color: var(--dim); background: none; border: none;
+    cursor: pointer; padding: 0; font-weight: 600; text-decoration: underline; width: auto;
+  }
+  #lock .chg:hover { color: var(--gold); }
+  #lock .foot { margin-top: 14px; font-size: 10.5px; color: var(--dim); font-family: var(--mono); letter-spacing: .5px; }
+</style>
+</head>
+<body>
+<div id="lock">
+  <div class="lockbg"></div>
+  <div class="card">
+    <div class="lgo">K</div>
+    <div class="big">KUBO//OS</div>
+    <span class="ver">v2.0 · multi-page web os</span>
+    <div class="msg" id="lockmsg">no password fr. just drop ur name<br>and we good.</div>
+    <input id="lockname" placeholder="ur name" maxlength="24">
+    <button id="lockgo">enter</button>
+    <button class="chg" id="lockchg" style="display:none">not u? change name</button>
+    <div class="foot">no frameworks. zero cap.</div>
+  </div>
+</div>
+<script>
+var storedName = localStorage.getItem("kubo_name") || "";
+var lockName = document.getElementById("lockname");
+var lockMsg = document.getElementById("lockmsg");
+var lockChg = document.getElementById("lockchg");
+var lockGo = document.getElementById("lockgo");
+function lockAsk(force) {
+  if (!force && storedName) {
+    lockMsg.innerHTML = "oh hey, <b>" + storedName + "</b>. missed u fr.<br>hit enter. we good.";
+    lockName.style.display = "none";
+    lockChg.style.display = "inline-block";
+    lockGo.textContent = "unlock";
+  } else {
+    lockMsg.innerHTML = "no password fr. just drop ur name<br>and we good.";
+    lockName.style.display = "block";
+    lockChg.style.display = "none";
+    lockGo.textContent = "enter";
+    lockName.value = storedName;
+  }
+}
+lockAsk(false);
+function unlock() {
+  var n = lockName.value.trim();
+  if (!n && !storedName) { lockName.focus(); return; }
+  if (n) { storedName = n; localStorage.setItem("kubo_name", n); }
+  window.location.href = "index.html";
+}
+lockGo.onclick = unlock;
+lockChg.onclick = function () { lockAsk(true); lockName.focus(); };
+lockName.addEventListener("keydown", function (e) { if (e.key === "Enter") unlock(); });
+lockName.focus();
+</script>
+</body>
+</html>

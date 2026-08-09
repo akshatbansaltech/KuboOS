@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Calculator</title>
+<link rel="stylesheet" href="app.css">
+<style>
+  .calc { padding: 12px; display: flex; flex-direction: column; gap: 10px; height: 100%; }
+  .calc .scr {
+    background: rgba(14, 12, 9, 0.7); border: 1px solid var(--line); border-radius: 11px;
+    padding: 12px 14px; text-align: right; font-family: var(--mono);
+  }
+  .calc .scr .expr { font-size: 12px; color: var(--dim); min-height: 15px; word-break: break-all; }
+  .calc .scr .res { font-size: 30px; font-weight: 700; color: var(--amber); min-height: 38px; word-break: break-all; }
+  .calc .keys { flex: 1; display: grid; grid-template-columns: repeat(4, 1fr); gap: 7px; }
+  .calc button {
+    border: 1px solid var(--line); background: rgba(255, 196, 140, 0.07); color: var(--txt);
+    border-radius: 10px; font-size: 15px; font-weight: 700; cursor: pointer; transition: background .08s, transform .05s;
+    font-family: var(--mono);
+  }
+  .calc button:hover { background: rgba(255, 196, 140, 0.2); }
+  .calc button:active { transform: scale(0.92); }
+  .calc .op { color: var(--ember); font-size: 17px; }
+  .calc .eq { background: linear-gradient(135deg, var(--amber), var(--gold)); color: var(--ink); font-weight: 800; border: none; }
+  .calc .clr { color: var(--ember); }
+  .calc .bsp { color: var(--ember); }
+</style>
+</head>
+<body>
+<div class="calc">
+  <div class="scr"><div class="expr" id="cexpr"></div><div class="res" id="cres">0</div></div>
+  <div class="keys" id="ckeys"></div>
+</div>
+<script>
+(function () {
+  var scrE = document.getElementById("cexpr");
+  var scrR = document.getElementById("cres");
+  var expr = "";
+  var keys = [["C", "clr"], ["(", "op"], [")", "op"], ["⌫", "bsp"],
+              ["7", ""], ["8", ""], ["9", ""], ["÷", "op"],
+              ["4", ""], ["5", ""], ["6", ""], ["×", "op"],
+              ["1", ""], ["2", ""], ["3", ""], ["−", "op"],
+              ["0", ""], [".", ""], ["%", "op"], ["=", "eq"]];
+  var kg = document.getElementById("ckeys");
+  keys.forEach(function (k) {
+    var b = document.createElement("button");
+    b.textContent = k[0];
+    b.className = k[1];
+    b.onclick = function () { press(k[0]); };
+    kg.appendChild(b);
+  });
+  function press(k) {
+    if (k === "C") { expr = ""; scrE.textContent = ""; scrR.textContent = "0"; return; }
+    if (k === "⌫") { expr = expr.slice(0, -1); render(); return; }
+    if (k === "=") { evaluate(); return; }
+    var l = expr.slice(-1);
+    if (["÷", "×", "−", "+"].indexOf(k) >= 0 && expr !== "" && ["÷", "×", "−", "+", "(", ".", ""].indexOf(l) >= 0) { expr = expr.slice(0, -1) + k; render(); return; }
+    if (k === "." && l === ".") return;
+    if (k === "%") { if (expr) { expr = (parseFloat(expr) / 100).toString(); render(); } return; }
+    expr += k; render();
+  }
+  function render() { scrE.textContent = expr; scrR.textContent = expr === "" ? "0" : expr; }
+  function evaluate() {
+    try {
+      if (!expr) return;
+      var clean = expr.replace(/÷/g, "/").replace(/×/g, "*").replace(/−/g, "-");
+      var out = Function("return (" + clean + ")")();
+      if (typeof out !== "number" || !isFinite(out)) throw new Error("math broke");
+      scrE.textContent = expr + " =";
+      expr = String(parseFloat(out.toPrecision(12)));
+      scrR.textContent = expr;
+    } catch (e) { scrR.textContent = "uh oh. math broke"; expr = ""; }
+  }
+  document.addEventListener("keydown", function (e) {
+    var map = { "0": "0", "1": "1", "2": "2", "3": "3", "4": "4", "5": "5", "6": "6", "7": "7", "8": "8", "9": "9", ".": ".", "+": "+", "-": "−", "*": "×", "/": "÷", "(": "(", ")": ")", "%": "%" };
+    if (map[e.key]) { e.preventDefault(); press(map[e.key]); }
+    else if (e.key === "Enter") { e.preventDefault(); press("="); }
+    else if (e.key === "Backspace") { e.preventDefault(); press("⌫"); }
+    else if (e.key === "Escape") { e.preventDefault(); press("C"); }
+  });
+})();
+</script>
+</body>
+</html>

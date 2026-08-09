@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Terminal</title>
+<link rel="stylesheet" href="app.css">
+<style>
+  .term { height: 100%; display: flex; flex-direction: column; background: rgba(10, 8, 6, 0.92); }
+  #termout { flex: 1; overflow-y: auto; padding: 13px 15px; font-family: var(--mono); font-size: 12.5px; line-height: 1.6; white-space: pre-wrap; word-break: break-all; }
+  #termout .green { color: var(--amber); }
+  #termout .cyan { color: var(--gold); }
+  #termout .dim { color: var(--dim); }
+  #termout .pink { color: var(--ember); }
+  #termout .gold { color: var(--gold); }
+  #termin { display: flex; align-items: center; gap: 8px; padding: 8px 15px 13px; font-family: var(--mono); font-size: 12.5px; }
+  #termin .ps { color: var(--amber); white-space: nowrap; }
+  #termin input { flex: 1; background: transparent; border: none; outline: none; color: var(--txt); font-family: var(--mono); font-size: 12.5px; caret-color: var(--amber); }
+</style>
+</head>
+<body>
+<div class="term">
+  <div id="termout"></div>
+  <div id="termin"><span class="ps" id="ps">kubo@user:~$</span><input id="termcmd" autocomplete="off" spellcheck="false" placeholder="type help"></div>
+</div>
+<script>
+var out = document.getElementById("termout");
+var inp = document.getElementById("termcmd");
+var name = localStorage.getItem("kubo_name") || "user";
+document.getElementById("ps").textContent = "kubo@" + name + ":~$";
+var BANNER = '<span class="green">KUBO//OS v2.0</span> <span class="dim">| zero frameworks. zero cap.</span>\ntype <span class="cyan">help</span> fr';
+print(BANNER);
+function print(html) {
+  var d = document.createElement("div");
+  d.innerHTML = html;
+  out.appendChild(d);
+  out.scrollTop = out.scrollHeight;
+}
+inp.addEventListener("keydown", function (e) {
+  if (e.key !== "Enter") return;
+  var c = inp.value.trim();
+  inp.value = "";
+  print('<span class="cyan">kubo@' + name + '</span><span class="dim">:</span><span class="green">~</span><span class="dim">$</span> ' + c.replace(/</g, "&lt;"));
+  run(c);
+});
+function run(c) {
+  var a = c.split(/\s+/);
+  var cmd = a[0].toLowerCase();
+  switch (cmd) {
+    case "help":
+      print("commands: <span class='cyan'>help, neofetch, whoami, hi, joke, date, echo, open, clear, sudo, banner</span>");
+      break;
+    case "whoami": print("u are " + name + ". running an os where every page is hand-built. built different."); break;
+    case "hi":
+    case "hey":
+    case "hello": print("yo " + name + ". drink water. touch grass. we good."); break;
+    case "joke": print("why did the developer go broke?\nhe used up all his <span class='gold'>cache</span>. lol."); break;
+    case "date": print(new Date().toString()); break;
+    case "clear": out.innerHTML = ""; break;
+    case "banner": print(BANNER); break;
+    case "kubo":
+    case "cube": print("the cube is watching. don't worry, it's on your side."); break;
+    case "sudo": print("<span class='pink'>permission denied lol. no root here. u already have everything.</span>"); break;
+    case "open":
+      var target = a[1] ? a[1].toLowerCase() : "";
+      var p = window.parent;
+      if (target === "notes" || target === "calc" || target === "term" || target === "about" || target === "hello") {
+        print("opening " + target + "...");
+        if (p && p.kuboOS) p.kuboOS.openApp(target);
+        else print("no desktop to open in. open this os first.");
+      } else print("usage: open [welcome|notes|calc|term|about]");
+      break;
+    case "echo": print(a.slice(1).join(" ").replace(/</g, "&lt;") || " "); break;
+    case "neofetch":
+      print('<span class="green">user</span>  ' + name + '\n<span class="green">os</span>    KuboOS 2.0 (multi-page web build)\n<span class="green">wm</span>    kubo-wm: drag, snap, resize, all vanilla\n<span class="green">shell</span> ksh 2.0\n<span class="green">uptime</span> since u unlocked\n<span class="green">apps</span>  5. welcome, notes, calc, terminal, about\n<span class="green">pages</span> 7 html files, zero deps\n<span class="green">vibe</span>  no cap');
+      break;
+    case "": break;
+    default: print("nah, that's not a command. type <span class='cyan'>help</span>");
+  }
+  inp.focus();
+}
+inp.focus();
+</script>
+</body>
+</html>

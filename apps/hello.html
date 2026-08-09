@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Welcome</title>
+<link rel="stylesheet" href="app.css">
+<style>
+  .hello { padding: 22px 24px 20px; display: flex; flex-direction: column; gap: 16px; }
+  .hello .hero {
+    background: linear-gradient(135deg, rgba(255, 166, 61, 0.1), rgba(242, 193, 78, 0.06));
+    border: 1px solid var(--line); border-radius: 14px; padding: 18px;
+  }
+  .hello .greet { font-family: var(--disp); font-size: 24px; font-weight: 700; margin-bottom: 4px; }
+  .hello .sub { font-size: 13px; color: var(--dim); line-height: 1.5; }
+  .hello .tips { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .hello .tip {
+    background: rgba(255, 196, 140, 0.06); border: 1px solid var(--line); border-radius: 11px;
+    padding: 11px 12px; font-size: 12px; line-height: 1.5; color: var(--dim);
+  }
+  .hello .tip b { color: var(--txt); display: block; font-size: 12.5px; margin-bottom: 2px; }
+  .hello .tip .k { color: var(--amber); font-family: var(--mono); font-size: 11px; }
+  .hello .acts { display: flex; gap: 8px; }
+  .hello .acts button {
+    flex: 1; border: 1px solid var(--line); background: rgba(255, 196, 140, 0.1); color: var(--txt);
+    border-radius: 10px; padding: 10px; font-size: 12.5px; font-weight: 700; cursor: pointer;
+    transition: background .1s, transform .06s;
+  }
+  .hello .acts button:hover { background: rgba(255, 196, 140, 0.22); transform: translateY(-1px); }
+  .hello .acts button.glow { background: linear-gradient(135deg, var(--amber), var(--gold)); color: var(--ink); border: none; }
+  .hello .foot { font-size: 10.5px; color: var(--dim); text-align: center; font-family: var(--mono); }
+</style>
+</head>
+<body>
+<div class="hello">
+  <div class="hero">
+    <div class="greet" id="greet">hey.</div>
+    <div class="sub">a whole os in ur browser. every page hand-built. windows drag, apps open, terminal talks back. no password, no login, no drama. just vibes.</div>
+  </div>
+  <div class="tips">
+    <div class="tip"><b>drag windows around</b>throw one at the top edge = full screen. double-click the bar also works.<br><span class="k">tip: double-click a titlebar</span></div>
+    <div class="tip"><b>terminal is real</b>type <span class="k">neofetch</span>, <span class="k">sudo</span> or <span class="k">joke</span>. it responds.</div>
+    <div class="tip"><b>notes save themselves</b>close the app, come back later. thought's still there.</div>
+    <div class="tip"><b>no password. ever.</b>lockscreen just asks ur name. that's it.</div>
+  </div>
+  <div class="acts"><button class="glow" id="w-term">open terminal</button></div>
+  <div class="foot">kubo os v2.0 · zero frameworks. zero cap.</div>
+</div>
+<script>
+var name = localStorage.getItem("kubo_name") || "there";
+var h = new Date().getHours();
+var greet = h < 5 ? "up late, " + name + "?" : h < 12 ? "good morning, " + name : h < 17 ? "good afternoon, " + name : h < 21 ? "good evening, " + name : "good night, " + name;
+document.getElementById("greet").textContent = greet;
+document.getElementById("w-term").onclick = function () {
+  var p = window.parent;
+  if (p && p.kuboOS) p.kuboOS.openApp("term");
+  else window.location.href = "../index.html";
+};
+</script>
+</body>
+</html>

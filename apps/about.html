@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>About</title>
+<link rel="stylesheet" href="app.css">
+<style>
+  .about { padding: 20px 22px; display: flex; flex-direction: column; gap: 12px; align-items: flex-start; }
+  .about .big {
+    font-family: var(--disp); font-weight: 700; font-size: 36px; letter-spacing: 1px;
+    background: linear-gradient(90deg, var(--amber), var(--gold));
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+  }
+  .about .ver { font-size: 11px; color: var(--dim); font-family: var(--mono); }
+  .about p { font-size: 13px; line-height: 1.7; color: var(--dim); }
+  .about p b { color: var(--txt); }
+  .about .tags { display: flex; flex-wrap: wrap; gap: 6px; }
+  .about .tags span {
+    font-size: 11px; font-weight: 600; padding: 4px 10px; border-radius: 20px;
+    border: 1px solid var(--line); color: var(--ember); background: rgba(242, 112, 63, 0.06);
+  }
+  .about .tags span.lm { color: var(--amber); background: rgba(255, 166, 61, 0.06); border-color: rgba(255, 166, 61, 0.3); }
+  .about .back { margin-top: 6px; }
+  .about .back a { color: var(--amber); font-size: 12px; font-weight: 700; text-decoration: none; border-bottom: 1px dashed rgba(255, 166, 61, 0.4); }
+</style>
+</head>
+<body>
+<div class="about">
+  <div class="big">KUBO//OS</div>
+  <span class="ver">v2.0. every page hand-built. zero frameworks. zero cap.</span>
+  <p>a whole os that runs in ur browser. draggable windows, taskbar, clock, start menu. notes that save themselves. a calculator that actually works. a terminal that talks back. no password. just vibes.</p>
+  <div class="tags"><span class="lm">lockscreen</span><span class="lm">draggable windows</span><span>snap-to-maximize</span><span>taskbar + clock</span><span>start menu</span><span>notes w/ autosave</span><span>working calculator</span><span>keyboard calc</span><span>terminal</span><span>toasts</span><span>custom dialogs</span><span>welcome app</span><span>boot sequence</span></div>
+  <p>how it works: the lockscreen, the desktop and every app are separate html pages. the desktop loads each app in a window. plain html, css and js. nothing else.</p>
+  <p>how to use: click icons or hit the K button. drag titlebars, resize corners, double-click to maximize. type <b>neofetch</b> in the terminal. something breaks? refresh. act like it never happened.</p>
+  <div class="back"><a href="../index.html">back to desktop</a></div>
+</div>
+</body>
+</html>

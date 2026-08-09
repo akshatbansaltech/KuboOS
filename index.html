@@ -122,10 +122,7 @@
   .tb-btn:hover { background: rgba(255, 196, 140, 0.2); color: var(--txt); transform: translateY(-1px); }
   .tb-btn:active { transform: scale(0.9); }
   .tb-btn.close:hover { background: #e5484d; color: #fff; }
-  .wbody { flex: 1; overflow: auto; user-select: text; -webkit-user-select: text; }
-  .wbody::-webkit-scrollbar, #termout::-webkit-scrollbar { width: 9px; }
-  .wbody::-webkit-scrollbar-thumb, #termout::-webkit-scrollbar-thumb { background: rgba(255, 196, 140, 0.22); border-radius: 6px; border: 2px solid transparent; background-clip: content-box; }
-  .wbody::-webkit-scrollbar-thumb:hover, #termout::-webkit-scrollbar-thumb:hover { background-color: rgba(255, 196, 140, 0.4); }
+  .wframe { flex: 1; width: 100%; border: none; background: transparent; }
   .resizer {
     position: absolute; right: 0; bottom: 0; width: 18px; height: 18px;
     cursor: nwse-resize; touch-action: none;
@@ -252,57 +249,6 @@
   #modal button:hover { background: rgba(255, 196, 140, 0.22); transform: translateY(-1px); }
   #modal button.ok { background: linear-gradient(135deg, #e5484d, #ff7b6b); color: #fff; border: none; }
 
-  /* ---------- lock screen ---------- */
-  #lock {
-    position: fixed; inset: 0; z-index: 900; background: var(--bg);
-    display: grid; place-items: center;
-  }
-  #lock .lockbg {
-    position: absolute; inset: 0;
-    background: linear-gradient(rgba(6, 9, 16, 0.35), rgba(6, 9, 16, 0.65)), url("wallpaper.jpg") center / cover no-repeat;
-    filter: blur(6px) saturate(1.15); transform: scale(1.05);
-  }
-  #lock .card {
-    position: relative; z-index: 1; width: 350px; text-align: center;
-    background: var(--panel2); border: 1px solid var(--line); border-radius: 20px;
-    padding: 30px 28px 24px; box-shadow: 0 34px 90px rgba(0, 0, 0, 0.7);
-    animation: menuin 0.3s ease-out;
-  }
-  #lock .lgo {
-    width: 56px; height: 56px; border-radius: 16px; margin: 0 auto 14px;
-    display: grid; place-items: center; font-family: var(--mono); font-weight: 800; font-size: 22px; color: var(--ink);
-    background: linear-gradient(135deg, var(--amber), var(--gold));
-    box-shadow: 0 8px 24px rgba(255, 166, 61, 0.25);
-  }
-  #lock .big {
-    font-family: var(--disp); font-size: 40px; font-weight: 700; letter-spacing: 2px; margin-bottom: 4px;
-    background: linear-gradient(90deg, var(--amber), var(--gold));
-    -webkit-background-clip: text; background-clip: text; color: transparent;
-  }
-  #lock .ver { font-size: 10px; color: var(--dim); font-family: var(--mono); letter-spacing: 2px; display: block; margin-bottom: 22px; }
-  #lock .msg { font-size: 13px; color: var(--dim); line-height: 1.6; margin-bottom: 16px; }
-  #lock .msg b { color: var(--txt); }
-  #lock input {
-    width: 100%; background: rgba(8, 12, 20, 0.7); border: 1px solid var(--line); border-radius: 11px;
-    padding: 12px 14px; color: var(--txt); font-size: 15px; font-weight: 700; text-align: center;
-    outline: none; font-family: var(--font); margin-bottom: 12px;
-  }
-  #lock input:focus { border-color: rgba(255, 166, 61, 0.5); }
-  #lock button {
-    width: 100%; border: none; border-radius: 11px; padding: 12px; cursor: pointer;
-    background: linear-gradient(135deg, var(--amber), var(--gold)); color: var(--ink);
-    font-size: 14px; font-weight: 800; font-family: var(--font);
-    transition: transform .08s, filter .1s;
-  }
-  #lock button:hover { transform: translateY(-1px); filter: brightness(1.06); }
-  #lock button:active { transform: scale(0.97); }
-  #lock .chg {
-    margin-top: 14px; font-size: 11px; color: var(--dim); background: none; border: none;
-    cursor: pointer; padding: 0; font-weight: 600; text-decoration: underline; width: auto;
-  }
-  #lock .chg:hover { color: var(--gold); }
-  #lock .foot { margin-top: 14px; font-size: 10.5px; color: var(--dim); font-family: var(--mono); letter-spacing: .5px; }
-
   /* ---------- boot ---------- */
   #boot {
     position: fixed; inset: 0; z-index: 999; background: var(--bg);
@@ -319,97 +265,6 @@
   #bootbar { width: 280px; height: 6px; border-radius: 3px; background: rgba(255, 196, 140, 0.14); overflow: hidden; }
   #bootbar i { display: block; height: 100%; width: 0%; background: linear-gradient(90deg, var(--amber), var(--ember)); transition: width .3s; border-radius: 3px; }
   #boot .txt { font-size: 11.5px; color: var(--dim); font-family: var(--mono); letter-spacing: 1px; }
-
-  /* ---------- app: generic ---------- */
-  .app { height: 100%; display: flex; flex-direction: column; }
-  .appbar { display: flex; align-items: center; gap: 8px; padding: 12px 16px 0; font-size: 11px; color: var(--dim); }
-  .appbar b { color: var(--txt); font-size: 12px; }
-
-  /* ---------- app: welcome ---------- */
-  .hello { padding: 22px 24px 20px; display: flex; flex-direction: column; gap: 16px; }
-  .hello .hero { background: linear-gradient(135deg, rgba(255, 166, 61, 0.1), rgba(242, 193, 78, 0.06)); border: 1px solid var(--line); border-radius: 14px; padding: 18px; }
-  .hello .greet { font-family: var(--disp); font-size: 24px; font-weight: 700; margin-bottom: 4px; }
-  .hello .sub { font-size: 13px; color: var(--dim); line-height: 1.5; }
-  .hello .tips { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
-  .hello .tip { background: rgba(255, 196, 140, 0.06); border: 1px solid var(--line); border-radius: 11px; padding: 11px 12px; font-size: 12px; line-height: 1.5; color: var(--dim); }
-  .hello .tip b { color: var(--txt); display: block; font-size: 12.5px; margin-bottom: 2px; }
-  .hello .tip .k { color: var(--amber); font-family: var(--mono); font-size: 11px; }
-  .hello .acts { display: flex; gap: 8px; }
-  .hello .acts button {
-    flex: 1; border: 1px solid var(--line); background: rgba(255, 196, 140, 0.1); color: var(--txt);
-    border-radius: 10px; padding: 10px; font-size: 12.5px; font-weight: 700; cursor: pointer;
-    transition: background .1s, transform .06s;
-  }
-  .hello .acts button:hover { background: rgba(255, 196, 140, 0.22); transform: translateY(-1px); }
-  .hello .acts button.glow { background: linear-gradient(135deg, var(--amber), var(--gold)); color: var(--ink); border: none; }
-  .hello .foot { font-size: 10.5px; color: var(--dim); text-align: center; font-family: var(--mono); }
-
-  /* ---------- app: notes ---------- */
-  .notes { padding: 12px 16px; display: flex; flex-direction: column; gap: 10px; height: 100%; }
-  .notes textarea {
-    flex: 1; resize: none; background: rgba(8, 12, 20, 0.6); color: var(--txt);
-    border: 1px solid var(--line); border-radius: 11px; padding: 13px;
-    font-family: var(--mono); font-size: 13px; line-height: 1.6; outline: none;
-    transition: border-color .15s;
-  }
-  .notes textarea:focus { border-color: rgba(255, 166, 61, 0.5); }
-  .notes .meta { display: flex; justify-content: space-between; align-items: center; font-size: 11px; color: var(--dim); }
-  .notes .meta button {
-    border: 1px solid var(--line); background: rgba(255, 196, 140, 0.08); color: var(--dim);
-    border-radius: 8px; padding: 5px 14px; cursor: pointer; font-size: 11px; font-weight: 700;
-    transition: background .1s, color .1s;
-  }
-  .notes .meta button:hover { background: rgba(229, 72, 77, 0.2); color: var(--ember); border-color: rgba(229, 72, 77, 0.4); }
-
-  /* ---------- app: calculator ---------- */
-  .calc { padding: 12px; display: flex; flex-direction: column; gap: 10px; height: 100%; }
-  .calc .scr {
-    background: rgba(8, 12, 20, 0.7); border: 1px solid var(--line); border-radius: 11px;
-    padding: 12px 14px; text-align: right; font-family: var(--mono);
-  }
-  .calc .scr .expr { font-size: 12px; color: var(--dim); min-height: 15px; word-break: break-all; }
-  .calc .scr .res { font-size: 30px; font-weight: 700; color: var(--amber); min-height: 38px; word-break: break-all; transition: color .1s; }
-  .calc .keys { flex: 1; display: grid; grid-template-columns: repeat(4, 1fr); gap: 7px; }
-  .calc button {
-    border: 1px solid var(--line); background: rgba(255, 196, 140, 0.07); color: var(--txt);
-    border-radius: 10px; font-size: 15px; font-weight: 700; cursor: pointer; transition: background .08s, transform .05s;
-    font-family: var(--mono);
-  }
-  .calc button:hover { background: rgba(255, 196, 140, 0.2); }
-  .calc button:active { transform: scale(0.92); }
-  .calc .op { color: var(--ember); font-size: 17px; }
-  .calc .eq { background: linear-gradient(135deg, var(--amber), var(--gold)); color: var(--ink); font-weight: 800; border: none; }
-  .calc .clr { color: var(--ember); }
-  .calc .bsp { color: var(--ember); }
-
-  /* ---------- app: terminal ---------- */
-  .term { height: 100%; display: flex; flex-direction: column; background: rgba(4, 7, 12, 0.92); }
-  #termout { flex: 1; overflow-y: auto; padding: 13px 15px; font-family: var(--mono); font-size: 12.5px; line-height: 1.6; white-space: pre-wrap; word-break: break-all; }
-  #termout .green { color: var(--amber); }
-  #termout .cyan { color: var(--gold); }
-  #termout .dim { color: var(--dim); }
-  #termout .pink { color: var(--ember); }
-  #termout .gold { color: var(--gold); }
-  #termin { display: flex; align-items: center; gap: 8px; padding: 8px 15px 13px; font-family: var(--mono); font-size: 12.5px; }
-  #termin .ps { color: var(--amber); white-space: nowrap; }
-  #termin input { flex: 1; background: transparent; border: none; outline: none; color: var(--txt); font-family: var(--mono); font-size: 12.5px; caret-color: var(--amber); }
-
-  /* ---------- app: about ---------- */
-  .about { padding: 20px 22px; display: flex; flex-direction: column; gap: 12px; align-items: flex-start; }
-  .about .big {
-    font-family: var(--disp); font-weight: 700; font-size: 36px; letter-spacing: 1px;
-    background: linear-gradient(90deg, var(--amber), var(--gold));
-    -webkit-background-clip: text; background-clip: text; color: transparent;
-  }
-  .about .ver { font-size: 11px; color: var(--dim); font-family: var(--mono); }
-  .about p { font-size: 13px; line-height: 1.7; color: var(--dim); }
-  .about p b { color: var(--txt); }
-  .about .tags { display: flex; flex-wrap: wrap; gap: 6px; }
-  .about .tags span {
-    font-size: 11px; font-weight: 600; padding: 4px 10px; border-radius: 20px;
-    border: 1px solid var(--line); color: var(--ember); background: rgba(242, 112, 63, 0.06);
-  }
-  .about .tags span.lm { color: var(--amber); background: rgba(255, 166, 61, 0.06); border-color: rgba(255, 166, 61, 0.3); }
 </style>
 </head>
 <body>
@@ -434,7 +289,7 @@
 <div id="startmenu">
   <div id="smhead">
     <span class="cube">K</span>
-    <div><div class="who" id="smwho">hey, there</div><div class="sub">kubo os · v1.3</div></div>
+    <div><div class="who" id="smwho">hey, there</div><div class="sub">kubo os · v2.0</div></div>
   </div>
   <div id="smgrid"></div>
   <div id="smfoot">no password. no rules. just vibes.</div>
@@ -443,24 +298,10 @@
 <div id="toasts"></div>
 <div id="modal"><div class="box"><p id="modal-text"></p><div class="btns"><button id="modal-cancel">nah</button><button class="ok" id="modal-ok">yeah</button></div></div></div>
 
-<div id="lock">
-  <div class="lockbg"></div>
-  <div class="card">
-    <div class="lgo">K</div>
-    <div class="big">KUBO//OS</div>
-    <span class="ver">v1.3 · web os by akshat</span>
-    <div class="msg" id="lockmsg">no password fr. just drop ur name<br>and we good.</div>
-    <input id="lockname" placeholder="your name" maxlength="24">
-    <button id="lockgo">enter</button>
-    <button class="chg" id="lockchg" style="display:none">not u? change name</button>
-    <div class="foot">one html file. zero cap.</div>
-  </div>
-</div>
-
-<div id="boot" style="display:none">
+<div id="boot">
   <div class="logo">KUBO//OS</div>
   <div id="bootbar"><i></i></div>
-  <div class="txt" id="boottxt">warming up the kernel...</div>
+  <div class="txt" id="boottxt">powering up...</div>
 </div>
 
 <script>
@@ -476,18 +317,17 @@
   };
 
   var APPS = [
-    { id: "hello",  name: "Welcome",  icon: "WE", w: 480, h: 460, f: appHello },
-    { id: "notes",  name: "Notes",    icon: "NT", w: 460, h: 420, f: appNotes },
-    { id: "calc",   name: "Calculator", icon: "CA", w: 300, h: 440, f: appCalc },
-    { id: "term",   name: "Terminal", icon: "TR", w: 560, h: 380, f: appTerm },
-    { id: "about",  name: "About",    icon: "AB", w: 420, h: 430, f: appAbout }
+    { id: "hello",  name: "Welcome",    icon: "WE", src: "apps/hello.html", w: 480, h: 460 },
+    { id: "notes",  name: "Notes",      icon: "NT", src: "apps/notes.html", w: 460, h: 420 },
+    { id: "calc",   name: "Calculator", icon: "CA", src: "apps/calc.html",  w: 300, h: 440 },
+    { id: "term",   name: "Terminal",   icon: "TR", src: "apps/term.html",  w: 560, h: 380 },
+    { id: "about",  name: "About",      icon: "AB", src: "apps/about.html", w: 420, h: 430 }
   ];
 
   var windows = {};
   var zTop = 100;
   var nextX = 90, nextY = 55;
 
-  /* ============ toast + modal ============ */
   function toast(msg) {
     var t = document.createElement("div");
     t.className = "toast";
@@ -547,17 +387,25 @@
     btnClose.className = "tb-btn close"; btnClose.innerHTML = "✕"; btnClose.title = "close";
     tbar.appendChild(btnMin); tbar.appendChild(btnMax); tbar.appendChild(btnClose);
 
-    var body = document.createElement("div");
-    body.className = "wbody";
+    var frame = document.createElement("iframe");
+    frame.className = "wframe";
+    frame.src = app.src;
+    frame.title = app.name;
+
     var resizer = document.createElement("div");
     resizer.className = "resizer";
 
-    win.appendChild(tbar); win.appendChild(body); win.appendChild(resizer);
+    win.appendChild(tbar); win.appendChild(frame); win.appendChild(resizer);
     document.getElementById("windows").appendChild(win);
 
-    windows[id] = { win: win, body: body, minimized: false };
+    windows[id] = { win: win, frame: frame, minimized: false };
 
-    app.f(body);
+    frame.addEventListener("load", function () {
+      try {
+        frame.contentWindow.addEventListener("pointerdown", function () { focusWin(id); }, true);
+      } catch (e) {}
+    });
+
     addRunBtn(id, app);
     makeDraggable(win, tbar);
     makeResizable(win, resizer);
@@ -725,46 +573,9 @@
     if (!e.target.closest("#startmenu") && !e.target.closest("#kubo")) toggleMenu(false);
   });
 
-  /* ============ lockscreen ============ */
-  var storedName = localStorage.getItem("kubo_name") || "";
-  var lock = document.getElementById("lock");
-  var lockName = document.getElementById("lockname");
-  var lockMsg = document.getElementById("lockmsg");
-  var lockChg = document.getElementById("lockchg");
-  var lockGo = document.getElementById("lockgo");
-  function lockAsk(force) {
-    if (!force && storedName) {
-      lockMsg.innerHTML = "oh hey, <b>" + storedName + "</b>. missed u fr.<br>hit enter. we good.";
-      lockName.style.display = "none";
-      lockChg.style.display = "inline-block";
-      lockGo.textContent = "unlock";
-    } else {
-      lockMsg.innerHTML = "no password fr. just drop ur name<br>and we good.";
-      lockName.style.display = "block";
-      lockChg.style.display = "none";
-      lockGo.textContent = "enter";
-      lockName.value = storedName;
-    }
-  }
-  lockAsk(false);
-  function unlock() {
-    var n = lockName.value.trim();
-    if (!n && !storedName) { lockName.focus(); return; }
-    if (n && n !== storedName) {
-      storedName = n;
-      localStorage.setItem("kubo_name", n);
-    }
-    lock.style.display = "none";
-    doBoot();
-  }
-  lockGo.onclick = unlock;
-  lockChg.onclick = function () { lockAsk(true); lockName.focus(); };
-  lockName.addEventListener("keydown", function (e) { if (e.key === "Enter") unlock(); });
-  lockName.focus();
-
   /* ============ boot ============ */
   function doBoot() {
-    var lines = ["powering up...", "loading apps...", "polishing pixels...", "sheesh, almost done...", "sup, " + storedName + "."];
+    var lines = ["powering up...", "loading pages (all 7 of them)...", "polishing pixels...", "sheesh, almost done...", "sup, " + storedName + "."];
     var boot = document.getElementById("boot");
     boot.style.display = "flex";
     var bar = document.querySelector("#bootbar i");
@@ -793,172 +604,6 @@
     }, 100);
   }
 
-  /* ============ app: welcome ============ */
-  function appHello(body) {
-    var h = new Date().getHours();
-    var greet = h < 5 ? "up late, " + storedName + "?" : h < 12 ? "good morning, " + storedName : h < 17 ? "good afternoon, " + storedName : h < 21 ? "good evening, " + storedName : "good night, " + storedName;
-    body.innerHTML = '<div class="hello">' +
-      '<div class="hero"><div class="greet">' + greet + '</div><div class="sub">a whole os in one html file. windows drag, apps open, terminal talks back. no password, no login, no drama. just vibes.</div></div>' +
-      '<div class="tips">' +
-        '<div class="tip"><b>drag windows around</b>throw one at the top edge = full screen. double-click the bar also works.<br><span class="k">tip: double-click a titlebar</span></div>' +
-        '<div class="tip"><b>terminal is real</b>type <span class="k">neofetch</span>, <span class="k">sudo</span> or <span class="k">joke</span>. it responds.</div>' +
-        '<div class="tip"><b>notes save themselves</b>close the app, come back later. thought\'s still there.</div>' +
-        '<div class="tip"><b>no password. ever.</b>lockscreen just asks ur name. that\'s it.</div>' +
-      '</div>' +
-      '<div class="acts"><button class="glow" id="w-term">open terminal</button></div>' +
-      '<div class="foot">kubo os v1.3 · one html file. zero cap.</div></div>';
-    body.querySelector("#w-term").onclick = function () { openApp("term"); };
-  }
-
-  /* ============ app: notes ============ */
-  function appNotes(body) {
-    var note = localStorage.getItem("kubo_note") || "";
-    body.innerHTML = '<div class="app notes">' +
-      '<div class="appbar"><b>scratchpad</b> · autosaves as u type</div>' +
-      '<textarea placeholder="drop ur thoughts here. saves itself. fr.">' + note.replace(/</g, "&lt;") + "</textarea>" +
-      '<div class="meta"><span id="nbchars">0 chars</span><button id="nbclear">clear everything</button></div></div>';    var ta = body.querySelector("textarea");
-    var cnt = body.querySelector("#nbchars");
-    var timer = null;
-    ta.addEventListener("input", function () {
-      localStorage.setItem("kubo_note", ta.value);
-      cnt.textContent = ta.value.length + " chars";
-      if (!timer) {
-        timer = setTimeout(function () {
-          toast("note <b>saved</b>");
-          timer = null;
-        }, 900);
-      }
-    });
-    cnt.textContent = ta.value.length + " chars";
-    body.querySelector("#nbclear").onclick = function () {
-      ask("wipe ur whole scratchpad? no undo, bro.", function () {
-        ta.value = "";
-        localStorage.setItem("kubo_note", "");
-        cnt.textContent = "0 chars";
-        toast("scratchpad <b>wiped</b> clean");
-      });
-    };
-  }
-
-  /* ============ app: calculator ============ */
-  function appCalc(body) {
-    body.innerHTML = '<div class="calc">' +
-      '<div class="scr"><div class="expr"></div><div class="res">0</div></div>' +
-      '<div class="keys"></div></div>';
-    var scrE = body.querySelector(".expr");
-    var scrR = body.querySelector(".res");
-    var expr = "";
-    var keys = [["C", "clr"], ["(", "op"], [")", "op"], ["⌫", "bsp"],
-                ["7", ""], ["8", ""], ["9", ""], ["÷", "op"],
-                ["4", ""], ["5", ""], ["6", ""], ["×", "op"],
-                ["1", ""], ["2", ""], ["3", ""], ["−", "op"],
-                ["0", ""], [".", ""], ["%", "op"], ["=", "eq"]];
-    var kg = body.querySelector(".keys");
-    keys.forEach(function (k) {
-      var b = document.createElement("button");
-      b.textContent = k[0];
-      b.className = k[1];
-      b.onclick = function () { press(k[0]); };
-      kg.appendChild(b);
-    });
-    function press(k) {
-      if (k === "C") { expr = ""; scrE.textContent = ""; scrR.textContent = "0"; return; }
-      if (k === "⌫") { expr = expr.slice(0, -1); render(); return; }
-      if (k === "=") { evaluate(); return; }
-      var l = expr.slice(-1);
-      if (["÷", "×", "−", "+"].indexOf(k) >= 0 && expr !== "" && ["÷", "×", "−", "+", "(", ".", ""].indexOf(l) >= 0) { expr = expr.slice(0, -1) + k; render(); return; }
-      if (k === "." && l === ".") return;
-      if (k === "%") { if (expr) { expr = (parseFloat(expr) / 100).toString(); render(); } return; }
-      expr += k; render();
-    }
-    function render() { scrE.textContent = expr; scrR.textContent = expr === "" ? "0" : expr; }
-    function evaluate() {
-      try {
-        if (!expr) return;
-        var clean = expr.replace(/÷/g, "/").replace(/×/g, "*").replace(/−/g, "-");
-        var out = Function("return (" + clean + ")")();
-        if (typeof out !== "number" || !isFinite(out)) throw new Error("math broke");
-        scrE.textContent = expr + " =";
-        expr = String(parseFloat(out.toPrecision(12)));
-        scrR.textContent = expr;
-      } catch (e) { scrR.textContent = "uh oh. math broke"; expr = ""; }
-    }
-    body.addEventListener("keydown", function (e) {
-      var map = { "0": "0", "1": "1", "2": "2", "3": "3", "4": "4", "5": "5", "6": "6", "7": "7", "8": "8", "9": "9", ".": ".", "+": "+", "-": "−", "*": "×", "/": "÷", "(": "(", ")": ")", "%": "%" };
-      if (map[e.key]) { e.preventDefault(); press(map[e.key]); }
-      else if (e.key === "Enter") { e.preventDefault(); press("="); }
-      else if (e.key === "Backspace") { e.preventDefault(); press("⌫"); }
-      else if (e.key === "Escape") { e.preventDefault(); press("C"); }
-    });
-  }
-
-  /* ============ app: terminal ============ */
-  function appTerm(body) {
-    body.innerHTML = '<div class="term"><div id="termout"></div><div id="termin">' +
-      '<span class="ps">kubo@aksh:~$</span><input id="termcmd" autocomplete="off" spellcheck="false" placeholder="type help"></div></div>';
-    var out = body.querySelector("#termout");
-    var inp = body.querySelector("#termcmd");
-    var BANNER = '<span class="green">KUBO//OS v1.3</span> <span class="dim">| one html file. zero cap.</span>\ntype <span class="cyan">help</span> fr';
-    print(BANNER);
-    function print(html) {
-      var d = document.createElement("div");
-      d.innerHTML = html;
-      out.appendChild(d);
-      out.scrollTop = out.scrollHeight;
-    }
-    inp.addEventListener("keydown", function (e) {
-      if (e.key !== "Enter") return;
-      var c = inp.value.trim();
-      inp.value = "";
-      print('<span class="cyan">kubo@aksh</span><span class="dim">:</span><span class="green">~</span><span class="dim">$</span> ' + c.replace(/</g, "&lt;"));
-      run(c);
-    });
-    function run(c) {
-      var a = c.split(/\s+/);
-      var cmd = a[0].toLowerCase();
-      switch (cmd) {
-        case "help":
-          print("commands: <span class='cyan'>help, neofetch, whoami, hi, joke, date, echo, open, clear, sudo, banner</span>");
-          break;
-        case "whoami": print("u are " + storedName + ". running a whole os from one html file. built different."); break;
-        case "hi":
-        case "hey":
-        case "hello": print("yo " + storedName + ". drink water. touch grass. we good."); break;
-        case "joke": print("why did the developer go broke?\nhe used up all his <span class='gold'>cache</span>. lol."); break;
-        case "date": print(new Date().toString()); break;
-        case "clear": out.innerHTML = ""; break;
-        case "banner": print(BANNER); break;
-        case "kubo":
-        case "cube": print("the cube is watching. don't worry, it's on your side."); break;
-        case "sudo": print("<span class='pink'>permission denied lol. no root here. u already have everything.</span>"); break;
-        case "open":
-          var target = a[1] ? a[1].toLowerCase() : "";
-          if (target === "notes" || target === "calc" || target === "term" || target === "about" || target === "hello") {
-            print("opening " + target + "..."); openApp(target);
-          } else print("usage: open [welcome|notes|calc|term|about]");
-          break;
-        case "echo": print(a.slice(1).join(" ").replace(/</g, "&lt;") || " "); break;
-        case "neofetch":
-          print('<span class="green">user</span>  ' + storedName + '\n<span class="green">os</span>    KuboOS 1.3 (web build)\n<span class="green">wm</span>    kubo-wm: drag, snap, resize, all vanilla\n<span class="green">shell</span> ksh 1.3\n<span class="green">uptime</span> since you unlocked\n<span class="green">apps</span>  5. welcome, notes, calc, terminal, about\n<span class="green">kernel</span> 100% html + css + js, zero dependencies\n<span class="green">vibe</span>  no cap');
-          break;
-        case "": break;
-        default: print("nah, that's not a command. type <span class='cyan'>help</span>");
-      }
-      inp.focus();
-    }
-    setTimeout(function () { inp.focus(); }, 50);
-  }
-
-  /* ============ app: about ============ */
-  function appAbout(body) {
-    body.innerHTML = '<div class="about">' +
-      '<div class="big">KUBO//OS</div>' +
-      '<span class="ver">v1.3. one html file. zero frameworks. zero cap.</span>' +
-      '<p>a whole os that runs in ur browser. draggable windows, taskbar, clock, start menu. notes that save themselves. a calculator that actually works. a terminal that talks back. no password. just vibes.</p>' +
-      '<div class="tags"><span class="lm">lockscreen</span><span class="lm">draggable windows</span><span>snap-to-maximize</span><span>taskbar + clock</span><span>start menu</span><span>notes w/ autosave</span><span>working calculator</span><span>keyboard calc</span><span>terminal</span><span>toasts</span><span>custom dialogs</span><span>welcome app</span><span>boot sequence</span></div>' +
-      '<p>how to use: click icons or hit the K button. drag titlebars, resize corners, double-click to maximize. type <b>neofetch</b> in the terminal. something breaks? refresh. act like it never happened.</p></div>';
-  }
-
   /* ============ resize handling ============ */
   window.addEventListener("resize", function () {
     for (var k in windows) {
@@ -968,6 +613,17 @@
       w.style.top = Math.max(0, Math.min(parseInt(w.style.top) || 0, window.innerHeight - 120)) + "px";
     }
   });
+
+  /* ============ boot flow ============ */
+  var storedName = localStorage.getItem("kubo_name") || "";
+  if (!storedName) {
+    window.location.replace("lockscreen.html");
+    return;
+  }
+  doBoot();
+
+  /* ============ api for app pages ============ */
+  window.kuboOS = { openApp: openApp, toast: toast, ask: ask };
 })();
 </script>
 </body>

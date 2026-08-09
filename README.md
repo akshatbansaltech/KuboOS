@@ -16,6 +16,7 @@ I built it as part of the **Make Your Own OS** workshop.
 * Start menu and desktop icons
 * Toast notifications and custom dialogs
 * Data saved locally using `localStorage`
+* Multiple webpages: `lockscreen.html`, `index.html` (desktop), and each app is its own page in `apps/`
 
 ### Apps
 
@@ -39,9 +40,13 @@ Then open `index.html` in your browser.
 
 ## How it works
 
-KuboOS doesn't use React, Electron, or any other framework. The window manager, apps, animations, taskbar, start menu, and terminal are all written in vanilla JavaScript.
+KuboOS doesn't use React, Electron, or any other framework. It's a set of plain HTML pages:
 
-The entire project is contained in a single HTML file.
+* `lockscreen.html` — asks your name, then opens the desktop
+* `index.html` — the desktop: window manager, taskbar, start menu, boot sequence
+* `apps/*.html` — each app is its own page, loaded inside a draggable window
+
+The window manager, apps, animations, taskbar, start menu, and terminal are all written in vanilla JavaScript. App pages talk to the desktop through a tiny API (`window.kuboOS`).
 
 ## License
 
