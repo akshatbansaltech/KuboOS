@@ -17,3 +17,11 @@
 - start menu (K button) with app grid
 - window **resizing** from the corner handle, double-click titlebar to maximize
 - no password, no login — anyone who opens the page is in. exactly how the mission wanted it
+
+## DEVLOG #4 — the humanise pass, v1.1 (09 aug 2026)
+- generated a proper **wallpaper** — aurora + city lights, with vignette and grid overlay
+- new **welcome app** that greets by time of day ("good evening, akshat") and shows on first boot
+- **toast notifications** — "note saved ✓", plus custom os-styled dialogs instead of browser confirm()
+- windows **animate** in, snap to the top edge to maximize, drag a maximized window down to restore it
+- calculator got **keyboard support** (just type to calculate), terminal got `joke`, `hi`, `kubo` commands
+- warmer palette, proper fonts (Inter + Space Grotesk), gradient app tiles, friendlier copy everywhere
