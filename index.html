@@ -68,7 +68,6 @@
     display: flex; flex-direction: column; align-items: center; gap: 7px;
     cursor: pointer; font-size: 11.5px; font-weight: 600; color: var(--txt);
     text-align: center; border: 1px solid transparent;
-    text-shadow: 0 1px 4px rgba(0, 0, 0, 0.8);
     transition: background .12s, border-color .12s, transform .1s;
   }
   .dicon:hover { background: rgba(30, 25, 19, 0.55); border-color: var(--line); transform: translateY(-2px); }
@@ -153,7 +152,7 @@
     transition: transform .12s, filter .12s; position: relative;
   }
   #kubo:hover { transform: scale(1.08) rotate(-4deg); filter: brightness(1.1); }
-  #kubo .cube { font-family: var(--mono); text-shadow: 0 1px 0 rgba(255, 255, 255, 0.4); }
+  #kubo .cube { font-family: var(--mono); }
   #kubo.badge::after {
     content: ""; position: absolute; top: -3px; right: -3px; width: 11px; height: 11px;
     background: var(--ember); border-radius: 50%; border: 2px solid #0e0c09;
@@ -316,7 +315,7 @@
     -webkit-background-clip: text; background-clip: text; color: transparent;
     animation: bootglow 1.8s ease-in-out infinite alternate;
   }
-  @keyframes bootglow { from { filter: drop-shadow(0 0 8px rgba(255, 166, 61, 0.35)); } to { filter: drop-shadow(0 0 26px rgba(242, 193, 78, 0.6)); } }
+  @keyframes bootglow { from { opacity: 0.85; } to { opacity: 1; } }
   #bootbar { width: 280px; height: 6px; border-radius: 3px; background: rgba(255, 196, 140, 0.14); overflow: hidden; }
   #bootbar i { display: block; height: 100%; width: 0%; background: linear-gradient(90deg, var(--amber), var(--ember)); transition: width .3s; border-radius: 3px; }
   #boot .txt { font-size: 11.5px; color: var(--dim); font-family: var(--mono); letter-spacing: 1px; }
