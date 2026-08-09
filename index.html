@@ -1,9 +1,693 @@
 <!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>KuboOS</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  :root {
+    --bg: #080b12;
+    --panel: rgba(16, 22, 34, 0.85);
+    --panel2: rgba(22, 30, 46, 0.9);
+    --line: rgba(120, 160, 255, 0.14);
+    --txt: #d7e2f4;
+    --dim: #7c8ba1;
+    --lime: #b6ff2e;
+    --cyan: #22d3ee;
+    --pink: #ff4d8d;
+    --font: "Segoe UI", system-ui, -apple-system, sans-serif;
+    --mono: "Cascadia Code", Consolas, "Courier New", monospace;
+  }
+  html, body { height: 100%; }
+  body {
+    font-family: var(--font);
+    background: var(--bg);
+    color: var(--txt);
+    overflow: hidden;
+    user-select: none;
+    -webkit-user-select: none;
+  }
 
-<html>
-  <body style="background-color: #c9ffc9">
-    <h1>Welcome to my OS KuboOS</h1>
-    <h2>Introduction</h2>
-    <p>Hello World!</p>
-  </body>
+  /* ---------- wallpaper ---------- */
+  #wallpaper {
+    position: fixed; inset: 0;
+    background:
+      radial-gradient(900px 500px at 80% -10%, rgba(34, 211, 238, 0.16), transparent 60%),
+      radial-gradient(800px 500px at 15% 110%, rgba(182, 255, 46, 0.12), transparent 60%),
+      radial-gradient(700px 400px at 50% 50%, rgba(120, 80, 255, 0.08), transparent 70%),
+      var(--bg);
+    overflow: hidden;
+  }
+  #grid {
+    position: absolute; inset: 0;
+    background-image:
+      linear-gradient(rgba(120, 160, 255, 0.05) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(120, 160, 255, 0.05) 1px, transparent 1px);
+    background-size: 42px 42px;
+    mask-image: radial-gradient(ellipse at 50% 45%, black 30%, transparent 75%);
+    -webkit-mask-image: radial-gradient(ellipse at 50% 45%, black 30%, transparent 75%);
+  }
+  .orb { position: absolute; border-radius: 50%; filter: blur(90px); opacity: .35; animation: drift 14s ease-in-out infinite alternate; }
+  .orb.a { width: 380px; height: 380px; background: var(--lime); top: 12%; left: 8%; }
+  .orb.b { width: 420px; height: 420px; background: var(--cyan); bottom: 8%; right: 10%; animation-delay: -5s; }
+  .orb.c { width: 300px; height: 300px; background: #ff4d8d; top: 45%; left: 55%; opacity: .18; animation-delay: -9s; }
+  @keyframes drift { from { transform: translate(0, 0) scale(1); } to { transform: translate(40px, -30px) scale(1.15); } }
+
+  /* ---------- desktop icons ---------- */
+  #icons {
+    position: absolute; top: 18px; left: 18px;
+    display: flex; flex-direction: column; gap: 6px; z-index: 5;
+  }
+  .dicon {
+    width: 92px; padding: 10px 6px; border-radius: 10px;
+    display: flex; flex-direction: column; align-items: center; gap: 6px;
+    cursor: pointer; font-size: 11.5px; color: var(--txt);
+    text-align: center; border: 1px solid transparent;
+    transition: background .12s, border-color .12s, transform .06s;
+  }
+  .dicon:hover { background: rgba(120, 160, 255, 0.12); border-color: var(--line); }
+  .dicon:active { transform: scale(0.95); }
+  .dicon .ico {
+    width: 44px; height: 44px; border-radius: 12px;
+    display: grid; place-items: center; font-size: 24px;
+    background: linear-gradient(145deg, rgba(120, 160, 255, 0.18), rgba(120, 160, 255, 0.05));
+    border: 1px solid var(--line); box-shadow: 0 4px 14px rgba(0,0,0,.45);
+  }
+
+  /* ---------- windows ---------- */
+  #windows { position: absolute; inset: 0; z-index: 10; pointer-events: none; }
+  .win {
+    position: absolute; min-width: 260px; min-height: 150px;
+    background: var(--panel);
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    box-shadow: 0 18px 50px rgba(0,0,0,.55);
+    display: flex; flex-direction: column; overflow: hidden;
+    pointer-events: auto;
+    transition: box-shadow .15s;
+  }
+  .win.focused { border-color: rgba(120, 160, 255, 0.45); box-shadow: 0 18px 60px rgba(0,0,0,.7), 0 0 0 1px rgba(120,160,255,.25), 0 0 26px rgba(34,211,238,.15); }
+  .win.maximized { inset: 0 !important; width: auto !important; height: auto !important; border-radius: 0; }
+  .titlebar {
+    height: 38px; flex: 0 0 38px; display: flex; align-items: center; gap: 8px;
+    padding: 0 6px 0 12px; cursor: move; touch-action: none;
+    background: linear-gradient(180deg, rgba(40, 52, 76, 0.5), rgba(40, 52, 76, 0.15));
+    border-bottom: 1px solid var(--line);
+  }
+  .win:not(.focused) .titlebar { opacity: .7; }
+  .tbar-icons { width: 14px; height: 14px; font-size: 14px; display: grid; place-items: center; }
+  .title { flex: 1; font-size: 12.5px; font-weight: 600; letter-spacing: .4px; color: var(--txt); display: flex; align-items: center; gap: 8px; overflow: hidden; white-space: nowrap; }
+  .title .tbar-icons { font-size: 15px; }
+  .tb-btn {
+    width: 30px; height: 26px; border: none; border-radius: 6px; cursor: pointer;
+    background: transparent; color: var(--dim); font-size: 13px; line-height: 1;
+    display: grid; place-items: center; transition: background .1s, color .1s;
+  }
+  .tb-btn:hover { background: rgba(120, 160, 255, 0.18); color: var(--txt); }
+  .tb-btn.close:hover { background: #e5484d; color: #fff; }
+  .wbody { flex: 1; overflow: auto; user-select: text; -webkit-user-select: text; }
+  .wbody::-webkit-scrollbar { width: 9px; }
+  .wbody::-webkit-scrollbar-thumb { background: rgba(120,160,255,.25); border-radius: 5px; }
+  .resizer {
+    position: absolute; right: 0; bottom: 0; width: 16px; height: 16px;
+    cursor: nwse-resize; touch-action: none;
+  }
+  .resizer::after {
+    content: ""; position: absolute; right: 4px; bottom: 4px;
+    width: 8px; height: 8px; border-right: 2px solid var(--dim); border-bottom: 2px solid var(--dim);
+    border-radius: 0 0 3px 0; opacity: .5;
+  }
+
+  /* ---------- taskbar ---------- */
+  #taskbar {
+    position: fixed; left: 0; right: 0; bottom: 0; height: 52px; z-index: 100;
+    display: flex; align-items: center; gap: 6px; padding: 0 10px;
+    background: rgba(10, 14, 22, 0.85);
+    backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+    border-top: 1px solid var(--line);
+  }
+  #kubo {
+    width: 40px; height: 40px; border: none; border-radius: 10px; cursor: pointer;
+    background: linear-gradient(135deg, var(--lime), #5ce37a 55%, var(--cyan));
+    display: grid; place-items: center; font-weight: 800; font-size: 15px; color: #08121a;
+    transition: transform .1s, filter .1s; position: relative; overflow: visible;
+  }
+  #kubo:hover { transform: scale(1.07); filter: brightness(1.1); }
+  #kubo .cube { font-family: var(--mono); text-shadow: 0 1px 0 rgba(255,255,255,.4); }
+  #kubo.badge::after {
+    content: ""; position: absolute; top: -3px; right: -3px; width: 10px; height: 10px;
+    background: var(--pink); border-radius: 50%; border: 2px solid #0a0e16;
+  }
+  #runbtns { flex: 1; display: flex; gap: 6px; overflow-x: auto; align-items: center; }
+  #runbtns::-webkit-scrollbar { height: 0; }
+  .rbtn {
+    height: 38px; padding: 0 14px; border: 1px solid var(--line); border-radius: 9px; cursor: pointer;
+    background: rgba(120, 160, 255, 0.08); color: var(--txt);
+    font-size: 12px; font-weight: 600; display: flex; align-items: center; gap: 8px;
+    white-space: nowrap; transition: background .1s;
+  }
+  .rbtn:hover { background: rgba(120, 160, 255, 0.2); }
+  .rbtn.active { background: rgba(182, 255, 46, 0.14); border-color: rgba(182, 255, 46, 0.4); }
+  .rbtn .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--lime); }
+  #clock {
+    padding: 0 10px; text-align: right; font-size: 12px; color: var(--txt); line-height: 1.35;
+    border-left: 1px solid var(--line); margin-left: 4px;
+  }
+  #clock .t { font-weight: 700; font-size: 13px; font-variant-numeric: tabular-nums; }
+  #clock .d { color: var(--dim); }
+
+  /* ---------- start menu ---------- */
+  #startmenu {
+    position: fixed; left: 10px; bottom: 62px; width: 330px; z-index: 99;
+    background: var(--panel2); border: 1px solid var(--line); border-radius: 14px;
+    box-shadow: 0 24px 60px rgba(0,0,0,.6); padding: 14px;
+    display: none; backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+  }
+  #startmenu.open { display: block; }
+  #startmenu h2 { font-size: 13px; color: var(--dim); margin-bottom: 10px; letter-spacing: 2px; text-transform: uppercase; }
+  #smgrid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .smitem {
+    display: flex; align-items: center; gap: 10px; padding: 10px;
+    border: 1px solid var(--line); border-radius: 10px; cursor: pointer;
+    background: rgba(120, 160, 255, 0.06); transition: background .1s, transform .06s;
+  }
+  .smitem:hover { background: rgba(120, 160, 255, 0.16); transform: scale(1.02); }
+  .smitem .ico { font-size: 20px; }
+  .smitem .nm { font-size: 12.5px; font-weight: 600; }
+
+  /* ---------- boot ---------- */
+  #boot {
+    position: fixed; inset: 0; z-index: 999; background: var(--bg);
+    display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 18px;
+    transition: opacity .5s; cursor: wait;
+  }
+  #boot .logo {
+    font-family: var(--mono); font-weight: 800; font-size: 52px; letter-spacing: 2px;
+    background: linear-gradient(90deg, var(--lime), var(--cyan), var(--pink));
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+    animation: bootglow 1.6s ease-in-out infinite alternate;
+  }
+  @keyframes bootglow { from { filter: drop-shadow(0 0 6px rgba(182,255,46,.4)); } to { filter: drop-shadow(0 0 22px rgba(34,211,238,.7)); } }
+  #bootbar { width: 260px; height: 5px; border-radius: 3px; background: rgba(120,160,255,.15); overflow: hidden; }
+  #bootbar i { display: block; height: 100%; width: 0%; background: linear-gradient(90deg, var(--lime), var(--cyan)); transition: width .3s; }
+  #boot .txt { font-size: 11px; color: var(--dim); font-family: var(--mono); }
+
+  /* ---------- app styles ---------- */
+  .app { height: 100%; display: flex; flex-direction: column; }
+  .appbar { display: flex; align-items: center; gap: 8px; padding: 10px 14px 0; font-size: 11px; color: var(--dim); }
+  .appbar b { color: var(--txt); font-size: 12px; }
+
+  .notes { padding: 12px 14px; display: flex; flex-direction: column; gap: 10px; height: 100%; }
+  .notes textarea {
+    flex: 1; resize: none; background: rgba(8, 12, 20, 0.6); color: var(--txt);
+    border: 1px solid var(--line); border-radius: 10px; padding: 12px;
+    font-family: var(--mono); font-size: 13px; line-height: 1.55; outline: none;
+  }
+  .notes textarea:focus { border-color: rgba(182, 255, 46, 0.5); }
+  .notes .meta { display: flex; justify-content: space-between; font-size: 11px; color: var(--dim); }
+  .notes .meta button {
+    border: 1px solid var(--line); background: rgba(120,160,255,.1); color: var(--txt);
+    border-radius: 7px; padding: 4px 12px; cursor: pointer; font-size: 11px; font-weight: 600;
+  }
+  .notes .meta button:hover { background: rgba(232, 72, 77, 0.25); border-color: rgba(232,72,77,.5); }
+
+  .calc { padding: 12px; display: flex; flex-direction: column; gap: 10px; height: 100%; }
+  .calc .scr {
+    background: rgba(8, 12, 20, 0.7); border: 1px solid var(--line); border-radius: 10px;
+    padding: 12px 14px; text-align: right; font-family: var(--mono);
+  }
+  .calc .scr .expr { font-size: 12px; color: var(--dim); min-height: 15px; word-break: break-all; }
+  .calc .scr .res { font-size: 28px; font-weight: 700; color: var(--lime); min-height: 36px; word-break: break-all; }
+  .calc .keys { flex: 1; display: grid; grid-template-columns: repeat(4, 1fr); gap: 7px; }
+  .calc button {
+    border: 1px solid var(--line); background: rgba(120, 160, 255, 0.08); color: var(--txt);
+    border-radius: 9px; font-size: 15px; font-weight: 600; cursor: pointer; transition: background .08s, transform .05s;
+    font-family: var(--mono);
+  }
+  .calc button:hover { background: rgba(120, 160, 255, 0.2); }
+  .calc button:active { transform: scale(0.94); }
+  .calc .op { color: var(--cyan); font-size: 17px; }
+  .calc .eq { background: linear-gradient(135deg, var(--lime), #5ce37a); color: #08121a; font-weight: 800; }
+  .calc .clr { color: var(--pink); }
+  .calc .bsp { color: var(--pink); }
+
+  .term { height: 100%; display: flex; flex-direction: column; background: rgba(4, 7, 12, 0.9); }
+  #termout { flex: 1; overflow-y: auto; padding: 12px 14px; font-family: var(--mono); font-size: 12.5px; line-height: 1.55; white-space: pre-wrap; word-break: break-all; }
+  #termout .green { color: var(--lime); }
+  #termout .cyan { color: var(--cyan); }
+  #termout .dim { color: var(--dim); }
+  #termout .pink { color: var(--pink); }
+  #termin { display: flex; align-items: center; gap: 8px; padding: 8px 14px 12px; font-family: var(--mono); font-size: 12.5px; }
+  #termin .ps { color: var(--lime); white-space: nowrap; }
+  #termin input {
+    flex: 1; background: transparent; border: none; outline: none; color: var(--txt);
+    font-family: var(--mono); font-size: 12.5px;
+  }
+
+  .dl { padding: 14px; display: flex; flex-direction: column; gap: 14px; }
+  .dlog {
+    background: rgba(8, 12, 20, 0.55); border: 1px solid var(--line); border-radius: 10px; padding: 12px 14px;
+  }
+  .dlog .h { display: flex; align-items: baseline; gap: 10px; margin-bottom: 6px; flex-wrap: wrap; }
+  .dlog .v { color: var(--lime); font-family: var(--mono); font-weight: 700; font-size: 12px; letter-spacing: 1px; }
+  .dlog .dt { color: var(--dim); font-size: 11px; font-family: var(--mono); }
+  .dlog .t { font-weight: 700; font-size: 14px; }
+  .dlog ul { padding-left: 18px; font-size: 12.5px; line-height: 1.7; color: var(--dim); }
+  .dlog ul b { color: var(--txt); }
+  .dlog ul li::marker { color: var(--cyan); }
+
+  .about { padding: 18px; display: flex; flex-direction: column; gap: 12px; align-items: flex-start; }
+  .about .big {
+    font-family: var(--mono); font-weight: 800; font-size: 34px; letter-spacing: 1px;
+    background: linear-gradient(90deg, var(--lime), var(--cyan));
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+  }
+  .about .ver { font-size: 11px; color: var(--dim); font-family: var(--mono); }
+  .about p { font-size: 13px; line-height: 1.65; color: var(--dim); }
+  .about p b { color: var(--txt); }
+  .about .tags { display: flex; flex-wrap: wrap; gap: 6px; }
+  .about .tags span {
+    font-size: 11px; font-weight: 600; padding: 4px 10px; border-radius: 20px;
+    border: 1px solid var(--line); color: var(--cyan); background: rgba(34, 211, 238, 0.07);
+  }
+  .about .tags span.lm { color: var(--lime); background: rgba(182, 255, 46, 0.07); border-color: rgba(182,255,46,.3); }
+</style>
+</head>
+<body>
+
+<div id="wallpaper">
+  <div id="grid"></div>
+  <div class="orb a"></div>
+  <div class="orb b"></div>
+  <div class="orb c"></div>
+</div>
+
+<div id="icons"></div>
+<div id="windows"></div>
+
+<div id="taskbar">
+  <button id="kubo" title="KuboOS"><span class="cube">K</span></button>
+  <div id="runbtns"></div>
+  <div id="clock"><div class="t">--:--:--</div><div class="d">----</div></div>
+</div>
+
+<div id="startmenu">
+  <h2>KuboOS Apps</h2>
+  <div id="smgrid"></div>
+</div>
+
+<div id="boot">
+  <div class="logo">KUBO//OS</div>
+  <div id="bootbar"><i></i></div>
+  <div class="txt">booting kernel... hold on, akshat built this</div>
+</div>
+
+<script>
+(function () {
+  "use strict";
+
+  /* ============ apps ============ */
+  var APPS = [
+    { id: "notes",    name: "Notes",    icon: "📝", w: 460, h: 420, f: function (el) { appNotes(el); } },
+    { id: "calc",     name: "Calculator", icon: "🧮", w: 300, h: 440, f: function (el) { appCalc(el); } },
+    { id: "term",     name: "Terminal",  icon: "⌨️", w: 560, h: 380, f: function (el) { appTerm(el); } },
+    { id: "devlog",   name: "Devlog",    icon: "🛠️", w: 540, h: 520, f: function (el) { appDevlog(el); } },
+    { id: "about",    name: "About",     icon: "🔮", w: 420, h: 400, f: function (el) { appAbout(el); } }
+  ];
+
+  /* ============ window manager ============ */
+  var windows = {};
+  var zTop = 100;
+  var nextX = 80, nextY = 60;
+
+  function openApp(id) {
+    var app = null;
+    for (var i = 0; i < APPS.length; i++) if (APPS[i].id === id) app = APPS[i];
+    if (!app) return;
+    if (windows[id]) { focusWin(id); return; }
+
+    var win = document.createElement("div");
+    win.className = "win";
+    win.id = "win-" + id;
+    win.style.width = app.w + "px";
+    win.style.height = app.h + "px";
+    win.style.left = Math.min(nextX, Math.max(10, window.innerWidth - app.w - 30)) + "px";
+    win.style.top = Math.min(nextY, window.innerHeight - app.h - 80) + "px";
+    nextX = (nextX + 40) % (window.innerWidth - 360) + 20;
+    nextY = (nextY + 40) % (window.innerHeight - 300) + 20;
+
+    var tbar = document.createElement("div");
+    tbar.className = "titlebar";
+    tbar.innerHTML = '<span class="title"><span class="tbar-icons">' + app.icon + '</span>' + app.name + '</span>';
+    var btnMax = document.createElement("button");
+    btnMax.className = "tb-btn"; btnMax.innerHTML = "⬜"; btnMax.title = "maximize";
+    var btnMin = document.createElement("button");
+    btnMin.className = "tb-btn"; btnMin.innerHTML = "—"; btnMin.title = "minimize";
+    var btnClose = document.createElement("button");
+    btnClose.className = "tb-btn close"; btnClose.innerHTML = "✕"; btnClose.title = "close";
+    tbar.appendChild(btnMin); tbar.appendChild(btnMax); tbar.appendChild(btnClose);
+
+    var body = document.createElement("div");
+    body.className = "wbody";
+
+    var resizer = document.createElement("div");
+    resizer.className = "resizer";
+
+    win.appendChild(tbar); win.appendChild(body); win.appendChild(resizer);
+    document.getElementById("windows").appendChild(win);
+
+    windows[id] = { win: win, body: body, minimized: false };
+
+    app.f(body);
+    addRunBtn(id, app);
+    makeDraggable(win, tbar);
+    makeResizable(win, resizer);
+
+    btnClose.onclick = function () { closeApp(id); };
+    btnMin.onclick = function () { minimizeApp(id); };
+    btnMax.onclick = function () { maximizeApp(id); };
+    tbar.ondblclick = function () { maximizeApp(id); };
+    win.addEventListener("pointerdown", function () { focusWin(id); });
+
+    focusWin(id);
+  }
+
+  function focusWin(id) {
+    var w = windows[id]; if (!w) return;
+    w.minimized = false;
+    w.win.classList.add("focused");
+    w.win.style.display = "flex";
+    zTop += 1;
+    w.win.style.zIndex = zTop;
+    for (var k in windows) if (k !== id) windows[k].win.classList.remove("focused");
+    paintRunBtns();
+    document.getElementById("kubo").classList.remove("badge");
+  }
+
+  function minimizeApp(id) {
+    var w = windows[id]; if (!w) return;
+    w.minimized = true;
+    w.win.style.display = "none";
+    document.getElementById("kubo").classList.add("badge");
+    paintRunBtns();
+  }
+
+  function maximizeApp(id) {
+    var w = windows[id]; if (!w) return;
+    w.win.classList.toggle("maximized");
+    paintRunBtns();
+  }
+
+  function closeApp(id) {
+    var w = windows[id]; if (!w) return;
+    w.win.remove();
+    delete windows[id];
+    var b = document.querySelector('.rbtn[data-id="' + id + '"]');
+    if (b) b.remove();
+  }
+
+  function makeDraggable(win, tbar) {
+    tbar.addEventListener("pointerdown", function (e) {
+      if (e.target.closest(".tb-btn")) return;
+      if (win.classList.contains("maximized")) return;
+      var sx = e.clientX, sy = e.clientY;
+      var ox = win.offsetLeft, oy = win.offsetTop;
+      var mv = function (ev) {
+        win.style.left = Math.max(-win.offsetWidth + 80, Math.min(window.innerWidth - 40, ox + ev.clientX - sx)) + "px";
+        win.style.top = Math.max(0, Math.min(window.innerHeight - 60, oy + ev.clientY - sy)) + "px";
+      };
+      var up = function () {
+        window.removeEventListener("pointermove", mv);
+        window.removeEventListener("pointerup", up);
+      };
+      window.addEventListener("pointermove", mv);
+      window.addEventListener("pointerup", up);
+    });
+  }
+
+  function makeResizable(win, rz) {
+    rz.addEventListener("pointerdown", function (e) {
+      var sx = e.clientX, sy = e.clientY;
+      var ow = win.offsetWidth, oh = win.offsetHeight;
+      var mv = function (ev) {
+        win.style.width = Math.max(260, ow + ev.clientX - sx) + "px";
+        win.style.height = Math.max(150, oh + ev.clientY - sy) + "px";
+      };
+      var up = function () {
+        window.removeEventListener("pointermove", mv);
+        window.removeEventListener("pointerup", up);
+      };
+      window.addEventListener("pointermove", mv);
+      window.addEventListener("pointerup", up);
+    });
+  }
+
+  /* ============ taskbar ============ */
+  function addRunBtn(id, app) {
+    var b = document.createElement("button");
+    b.className = "rbtn";
+    b.dataset.id = id;
+    b.innerHTML = '<span class="dot"></span>' + app.icon + " " + app.name;
+    b.onclick = function () {
+      var w = windows[id];
+      if (w && w.minimized) focusWin(id);
+      else if (w && w.win.classList.contains("focused")) minimizeApp(id);
+      else if (w) focusWin(id);
+      else openApp(id);
+    };
+    document.getElementById("runbtns").appendChild(b);
+    paintRunBtns();
+  }
+
+  function paintRunBtns() {
+    for (var k in windows) {
+      var b = document.querySelector('.rbtn[data-id="' + k + '"]');
+      if (!b) continue;
+      b.classList.toggle("active", !windows[k].minimized && windows[k].win.classList.contains("focused"));
+    }
+  }
+
+  /* ============ clock ============ */
+  function tick() {
+    var n = new Date();
+    var h = String(n.getHours()).padStart(2, "0");
+    var m = String(n.getMinutes()).padStart(2, "0");
+    var s = String(n.getSeconds()).padStart(2, "0");
+    var days = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"];
+    var months = ["JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"];
+    document.querySelector("#clock .t").textContent = h + ":" + m + ":" + s;
+    document.querySelector("#clock .d").textContent = days[n.getDay()] + " " + String(n.getDate()).padStart(2, "0") + " " + months[n.getMonth()] + " " + n.getFullYear();
+  }
+  setInterval(tick, 1000);
+  tick();
+
+  /* ============ start menu + icons ============ */
+  var smgrid = document.getElementById("smgrid");
+  var icoGrid = document.getElementById("icons");
+  APPS.forEach(function (a) {
+    var si = document.createElement("div");
+    si.className = "smitem";
+    si.innerHTML = '<span class="ico">' + a.icon + '</span><span class="nm">' + a.name + "</span>";
+    si.onclick = function () { toggleMenu(false); openApp(a.id); };
+    smgrid.appendChild(si);
+
+    var di = document.createElement("div");
+    di.className = "dicon";
+    di.innerHTML = '<span class="ico">' + a.icon + "</span><span>" + a.name + "</span>";
+    di.onclick = function () { openApp(a.id); };
+    icoGrid.appendChild(di);
+  });
+
+  var kubo = document.getElementById("kubo");
+  kubo.onclick = function (e) { e.stopPropagation(); toggleMenu(); };
+  function toggleMenu(force) {
+    var sm = document.getElementById("startmenu");
+    var open = force === undefined ? !sm.classList.contains("open") : force;
+    sm.classList.toggle("open", open);
+    if (open) kubo.classList.remove("badge");
+  }
+  document.addEventListener("pointerdown", function (e) {
+    if (!e.target.closest("#startmenu") && !e.target.closest("#kubo")) toggleMenu(false);
+  });
+
+  /* ============ boot ============ */
+  setTimeout(function () {
+    var bar = document.querySelector("#bootbar i");
+    var p = 0;
+    var iv = setInterval(function () {
+      p += 8 + Math.random() * 14;
+      if (p >= 100) {
+        p = 100; clearInterval(iv);
+        var boot = document.getElementById("boot");
+        boot.style.opacity = "0";
+        setTimeout(function () { boot.remove(); }, 500);
+      }
+      bar.style.width = p + "%";
+    }, 90);
+  }, 300);
+
+  /* ============ app: notes ============ */
+  function appNotes(body) {
+    var note = localStorage.getItem("kubo_note") || "";
+    body.innerHTML = '<div class="app notes">' +
+      '<div class="appbar"><b>scratchpad</b> · autosaves to your browser</div>' +
+      '<textarea placeholder="type something, it saves itself...">' + note.replace(/</g, "&lt;") + "</textarea>" +
+      '<div class="meta"><span id="nbchars">0 chars</span><button id="nbclear">clear</button></div></div>';
+    var ta = body.querySelector("textarea");
+    var cnt = body.querySelector("#nbchars");
+    ta.addEventListener("input", function () {
+      localStorage.setItem("kubo_note", ta.value);
+      cnt.textContent = ta.value.length + " chars";
+    });
+    cnt.textContent = ta.value.length + " chars";
+    body.querySelector("#nbclear").onclick = function () {
+      if (confirm("wipe the scratchpad?")) { ta.value = ""; localStorage.setItem("kubo_note", ""); cnt.textContent = "0 chars"; }
+    };
+  }
+
+  /* ============ app: calculator ============ */
+  function appCalc(body) {
+    body.innerHTML = '<div class="calc">' +
+      '<div class="scr"><div class="expr"></div><div class="res">0</div></div>' +
+      '<div class="keys"></div></div>';
+    var scrE = body.querySelector(".expr");
+    var scrR = body.querySelector(".res");
+    var expr = "", last = "";
+    var keys = [["C", "clr"], ["(", "op"], [")", "op"], ["⌫", "bsp"],
+                ["7", ""], ["8", ""], ["9", ""], ["÷", "op"],
+                ["4", ""], ["5", ""], ["6", ""], ["×", "op"],
+                ["1", ""], ["2", ""], ["3", ""], ["−", "op"],
+                ["0", ""], [".", ""], ["%", "op"], ["=", "eq"]];
+    var kg = body.querySelector(".keys");
+    keys.forEach(function (k) {
+      var b = document.createElement("button");
+      b.textContent = k[0];
+      b.className = k[1];
+      b.onclick = function () { press(k[0]); };
+      kg.appendChild(b);
+    });
+    function press(k) {
+      if (k === "C") { expr = ""; last = ""; scrE.textContent = ""; scrR.textContent = "0"; return; }
+      if (k === "⌫") { expr = expr.slice(0, -1); render(); return; }
+      if (k === "=") { eval2(); return; }
+      var l = expr.slice(-1);
+      if (["÷", "×", "−", "+"].indexOf(k) >= 0 && ["÷", "×", "−", "+", "(", ".", ""].indexOf(l) >= 0 && expr !== "") { expr = expr.slice(0, -1) + k; render(); return; }
+      if (k === "." && l === ".") return;
+      if (k === "%") { eval2(); if (expr !== "" && expr !== "0") expr = (parseFloat(expr) / 100).toString(); render(); return; }
+      expr += k; render();
+    }
+    function render() { scrE.textContent = expr; scrR.textContent = expr === "" ? "0" : expr; }
+    function eval2() {
+      try {
+        if (!expr) return;
+        var clean = expr.replace(/÷/g, "/").replace(/×/g, "*").replace(/−/g, "-");
+        var out = Function("return (" + clean + ")")();
+        scrE.textContent = expr + " =";
+        expr = String(parseFloat(out.toPrecision(12)));
+        scrR.textContent = expr;
+        last = expr;
+      } catch (e) { scrR.textContent = "error"; expr = ""; }
+    }
+  }
+
+  /* ============ app: terminal ============ */
+  function appTerm(body) {
+    body.innerHTML = '<div class="term"><div id="termout"></div><div id="termin">' +
+      '<span class="ps">kubo@aksh:~$</span><input id="termcmd" autocomplete="off" spellcheck="false"></div></div>';
+    var out = body.querySelector("#termout");
+    var inp = body.querySelector("#termcmd");
+    var BANNER = '<span class="green">KUBO//OS v1.0</span> <span class="dim">| web os by akshat</span>\ntype <span class="cyan">help</span> to see commands';
+    print(BANNER);
+    function print(html) {
+      var d = document.createElement("div");
+      d.innerHTML = html;
+      out.appendChild(d);
+      out.scrollTop = out.scrollHeight;
+    }
+    inp.addEventListener("keydown", function (e) {
+      if (e.key !== "Enter") return;
+      var c = inp.value.trim();
+      inp.value = "";
+      print('<span class="cyan">kubo@aksh</span><span class="dim">:</span><span class="green">~</span><span class="dim">$</span> ' + c.replace(/</g, "&lt;"));
+      run(c);
+    });
+    function run(c) {
+      var a = c.split(/\s+/);
+      var cmd = a[0].toLowerCase();
+      switch (cmd) {
+        case "help":
+          print("commands: <span class='cyan'>help, neofetch, whoami, date, echo, open, clear, sudo, banner</span>");
+          break;
+        case "whoami": print("akshat — icse class 10, future ai engineer, builder of this os"); break;
+        case "date": print(new Date().toString()); break;
+        case "clear": out.innerHTML = ""; break;
+        case "banner": print(BANNER); break;
+        case "sudo":
+          print("<span class='pink'>permission denied: this is a no-root os, like it should be</span>");
+          break;
+        case "open":
+          var target = a[1] ? a[1].toLowerCase() : "";
+          if (target === "notes" || target === "calc" || target === "term" || target === "devlog" || target === "about") {
+            print("opening " + target + "..."); openApp(target);
+          } else print("usage: open [notes|calc|term|devlog|about]");
+          break;
+        case "echo": print(a.slice(1).join(" ").replace(/</g, "&lt;") || " "); break;
+        case "neofetch":
+          print('<span class="green">user</span>  akshat\n<span class="green">os</span>    KuboOS 1.0 (web build)\n<span class="green">wm</span>    kubo-wm (draggable windows, vanilla js)\n<span class="green">shell</span> ksh 1.0\n<span class="green">uptime</span> since you opened the tab\n<span class="green">apps</span>  5 — notes, calc, terminal, devlog, about\n<span class="green">kernel</span> 100% html + css + js, zero deps');
+          break;
+        case "": break;
+        default: print("command not found: <span class='pink'>" + cmd.replace(/</g, "&lt;") + "</span> — try <span class='cyan'>help</span>");
+      }
+      inp.focus();
+    }
+    setTimeout(function () { inp.focus(); }, 50);
+  }
+
+  /* ============ app: devlog ============ */
+  function appDevlog(body) {
+    body.innerHTML = '<div class="app"><div class="appbar"><b>devlog</b> · 3 entries · progress as it happened</div><div class="dl"></div></div>';
+    var dl = body.querySelector(".dl");
+    DEVLOGS.forEach(function (e) {
+      var d = document.createElement("div");
+      d.className = "dlog";
+      d.innerHTML = '<div class="h"><span class="v">' + e.ver + "</span><span class=\"dt\">" + e.date + "</span><span class='t'>" + e.title + "</span></div><ul>" +
+        e.items.map(function (i) { return "<li>" + i + "</li>"; }).join("") + "</ul>";
+      dl.appendChild(d);
+    });
+  }
+
+  var DEVLOGS = [
+    { ver: "DEVLOG #1", date: "09 aug 2026", title: "skeleton + window manager",
+      items: ["repo init, html stub replaced with real structure", "drawn the desktop: dark cyberpunk wallpaper with grid + glow orbs, all pure css", "built kubo-wm: windows that drag, focus, minimize, maximize and close", "taskbar with running-app pills + live clock so it actually feels like an os"] },
+    { ver: "DEVLOG #2", date: "09 aug 2026", title: "the apps",
+      items: ["<b>notes</b> — scratchpad that autosaves to localStorage (survives refresh)", "<b>calculator</b> — fully working with keyboard-style buttons, ÷ × − + () and %", "<b>terminal</b> — fake shell with real commands: help, neofetch, sudo (denied, obviously), open", "<b>devlog</b> — this app, progress displayed inside the os itself"] },
+    { ver: "DEVLOG #3", date: "09 aug 2026", title: "polish + extras beyond the guide",
+      items: ["boot sequence with animated loading bar that fades into the desktop", "start menu (K button) with app grid — same menu windows had, we made it work", "window <b>resizing</b> from the corner handle, double-click titlebar to maximize", "no password, no login — anyone who opens the page is in. exactly how the mission wanted it"] }
+  ];
+
+  /* ============ app: about ============ */
+  function appAbout(body) {
+    body.innerHTML = '<div class="about">' +
+      '<div class="big">KUBO//OS</div>' +
+      '<span class="ver">v1.0 — a web os, built by akshat. zero frameworks, zero dependencies.</span>' +
+      '<p>this whole thing is <b>one html file</b>. the wallpaper, the window manager, the taskbar, every app — all hand-rolled in plain <b>html, css and vanilla javascript</b>. that was the whole point of the workshop: make it yourself, not install it.</p>' +
+      '<div class="tags"><span class="lm">draggable windows</span><span>taskbar + clock</span><span>start menu</span><span>notes w/ autosave</span><span>working calculator</span><span>terminal</span><span>devlog</span><span>boot sequence</span><span>resizable windows</span></div>' +
+      '<p>how to use: click icons on the desktop (or the K button) to open apps. drag titlebars around, resize from corners, minimize to the taskbar. try <b>neofetch</b> in the terminal. nothing here needs a password — the os trusts you.</p></div>';
+  }
+
+  /* ============ resize handling ============ */
+  window.addEventListener("resize", function () {
+    for (var k in windows) {
+      var w = windows[k].win;
+      if (w.classList.contains("maximized")) continue;
+      w.style.left = Math.max(0, Math.min(parseInt(w.style.left) || 0, window.innerWidth - 120)) + "px";
+      w.style.top = Math.max(0, Math.min(parseInt(w.style.top) || 0, window.innerHeight - 120)) + "px";
+    }
+  });
+})();
+</script>
+</body>
 </html>
