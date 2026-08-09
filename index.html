@@ -75,7 +75,8 @@
   .dicon:active { transform: scale(0.94); }
   .dicon .ico {
     width: 46px; height: 46px; border-radius: 13px;
-    display: grid; place-items: center; font-size: 23px;
+    display: grid; place-items: center; font-size: 13px; font-weight: 800;
+    font-family: var(--mono); color: #08121a;
     box-shadow: 0 6px 18px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.18);
     border: 1px solid rgba(255, 255, 255, 0.12);
   }
@@ -108,7 +109,8 @@
   .win:not(.focused) .titlebar { opacity: 0.75; }
   .tchip {
     width: 22px; height: 22px; border-radius: 7px; flex: 0 0 22px;
-    display: grid; place-items: center; font-size: 12px;
+    display: grid; place-items: center; font-size: 9px; font-weight: 800;
+    font-family: var(--mono); color: #08121a;
     border: 1px solid rgba(255, 255, 255, 0.14);
     box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.25);
   }
@@ -209,7 +211,8 @@
   }
   .smitem:hover { background: rgba(140, 180, 255, 0.15); transform: scale(1.02); }
   .smitem .ico {
-    width: 30px; height: 30px; border-radius: 8px; display: grid; place-items: center; font-size: 15px;
+    width: 30px; height: 30px; border-radius: 8px; display: grid; place-items: center; font-size: 10px; font-weight: 800;
+    font-family: var(--mono); color: #08121a;
     border: 1px solid rgba(255, 255, 255, 0.12);
   }
   .smitem .nm { font-size: 12.5px; font-weight: 600; }
@@ -249,6 +252,57 @@
   }
   #modal button:hover { background: rgba(140, 180, 255, 0.22); transform: translateY(-1px); }
   #modal button.ok { background: linear-gradient(135deg, #e5484d, #ff7b6b); color: #fff; border: none; }
+
+  /* ---------- lock screen ---------- */
+  #lock {
+    position: fixed; inset: 0; z-index: 900; background: var(--bg);
+    display: grid; place-items: center;
+  }
+  #lock .lockbg {
+    position: absolute; inset: 0;
+    background: linear-gradient(rgba(6, 9, 16, 0.35), rgba(6, 9, 16, 0.65)), url("wallpaper.jpg") center / cover no-repeat;
+    filter: blur(6px) saturate(1.15); transform: scale(1.05);
+  }
+  #lock .card {
+    position: relative; z-index: 1; width: 350px; text-align: center;
+    background: var(--panel2); border: 1px solid var(--line); border-radius: 20px;
+    padding: 30px 28px 24px; box-shadow: 0 34px 90px rgba(0, 0, 0, 0.7);
+    animation: menuin 0.3s ease-out;
+  }
+  #lock .lgo {
+    width: 56px; height: 56px; border-radius: 16px; margin: 0 auto 14px;
+    display: grid; place-items: center; font-family: var(--mono); font-weight: 800; font-size: 22px; color: #08121a;
+    background: linear-gradient(135deg, var(--lime), var(--cyan));
+    box-shadow: 0 8px 24px rgba(198, 255, 77, 0.25);
+  }
+  #lock .big {
+    font-family: var(--disp); font-size: 40px; font-weight: 700; letter-spacing: 2px; margin-bottom: 4px;
+    background: linear-gradient(90deg, var(--lime), var(--cyan));
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+  }
+  #lock .ver { font-size: 10px; color: var(--dim); font-family: var(--mono); letter-spacing: 2px; display: block; margin-bottom: 22px; }
+  #lock .msg { font-size: 13px; color: var(--dim); line-height: 1.6; margin-bottom: 16px; }
+  #lock .msg b { color: var(--txt); }
+  #lock input {
+    width: 100%; background: rgba(8, 12, 20, 0.7); border: 1px solid var(--line); border-radius: 11px;
+    padding: 12px 14px; color: var(--txt); font-size: 15px; font-weight: 700; text-align: center;
+    outline: none; font-family: var(--font); margin-bottom: 12px;
+  }
+  #lock input:focus { border-color: rgba(198, 255, 77, 0.5); }
+  #lock button {
+    width: 100%; border: none; border-radius: 11px; padding: 12px; cursor: pointer;
+    background: linear-gradient(135deg, var(--lime), #6ee7a0); color: #08121a;
+    font-size: 14px; font-weight: 800; font-family: var(--font);
+    transition: transform .08s, filter .1s;
+  }
+  #lock button:hover { transform: translateY(-1px); filter: brightness(1.06); }
+  #lock button:active { transform: scale(0.97); }
+  #lock .chg {
+    margin-top: 14px; font-size: 11px; color: var(--dim); background: none; border: none;
+    cursor: pointer; padding: 0; font-weight: 600; text-decoration: underline; width: auto;
+  }
+  #lock .chg:hover { color: var(--cyan); }
+  #lock .foot { margin-top: 14px; font-size: 10.5px; color: var(--dim); font-family: var(--mono); letter-spacing: .5px; }
 
   /* ---------- boot ---------- */
   #boot {
@@ -399,7 +453,7 @@
 <div id="startmenu">
   <div id="smhead">
     <span class="cube">K</span>
-    <div><div class="who">hey, akshat</div><div class="sub">kubo os · v1.1</div></div>
+    <div><div class="who" id="smwho">hey, there</div><div class="sub">kubo os · v1.2</div></div>
   </div>
   <div id="smgrid"></div>
   <div id="smfoot">no password. no rules. all vibes.</div>
@@ -408,7 +462,21 @@
 <div id="toasts"></div>
 <div id="modal"><div class="box"><p id="modal-text"></p><div class="btns"><button id="modal-cancel">nah</button><button class="ok" id="modal-ok">yeah</button></div></div></div>
 
-<div id="boot">
+<div id="lock">
+  <div class="lockbg"></div>
+  <div class="card">
+    <div class="lgo">K</div>
+    <div class="big">KUBO//OS</div>
+    <span class="ver">v1.2 · web os by akshat</span>
+    <div class="msg" id="lockmsg">this isn't a password. it's a name tag.<br>what should we call you?</div>
+    <input id="lockname" placeholder="your name" maxlength="24">
+    <button id="lockgo">enter</button>
+    <button class="chg" id="lockchg" style="display:none">not you? change the name</button>
+    <div class="foot">no password here. the os trusts you.</div>
+  </div>
+</div>
+
+<div id="boot" style="display:none">
   <div class="logo">KUBO//OS</div>
   <div id="bootbar"><i></i></div>
   <div class="txt" id="boottxt">warming up the kernel...</div>
@@ -428,12 +496,12 @@
   };
 
   var APPS = [
-    { id: "hello",  name: "Welcome",  icon: "✨", w: 480, h: 460, f: appHello },
-    { id: "notes",  name: "Notes",    icon: "📝", w: 460, h: 420, f: appNotes },
-    { id: "calc",   name: "Calculator", icon: "🧮", w: 300, h: 440, f: appCalc },
-    { id: "term",   name: "Terminal", icon: "⌨️", w: 560, h: 380, f: appTerm },
-    { id: "devlog", name: "Devlog",   icon: "🛠️", w: 540, h: 520, f: appDevlog },
-    { id: "about",  name: "About",    icon: "🔮", w: 420, h: 430, f: appAbout }
+    { id: "hello",  name: "Welcome",  icon: "WE", w: 480, h: 460, f: appHello },
+    { id: "notes",  name: "Notes",    icon: "NT", w: 460, h: 420, f: appNotes },
+    { id: "calc",   name: "Calculator", icon: "CA", w: 300, h: 440, f: appCalc },
+    { id: "term",   name: "Terminal", icon: "TR", w: 560, h: 380, f: appTerm },
+    { id: "devlog", name: "Devlog",   icon: "DL", w: 540, h: 520, f: appDevlog },
+    { id: "about",  name: "About",    icon: "AB", w: 420, h: 430, f: appAbout }
   ];
 
   var windows = {};
@@ -669,56 +737,97 @@
     var sm = document.getElementById("startmenu");
     var open = force === undefined ? !sm.classList.contains("open") : force;
     sm.classList.toggle("open", open);
-    if (open) kubo.classList.remove("badge");
+    if (open) {
+      kubo.classList.remove("badge");
+      document.getElementById("smwho").textContent = "hey, " + storedName;
+    }
   }
   document.addEventListener("pointerdown", function (e) {
     if (!e.target.closest("#startmenu") && !e.target.closest("#kubo")) toggleMenu(false);
   });
 
+  /* ============ lockscreen ============ */
+  var storedName = localStorage.getItem("kubo_name") || "";
+  var lock = document.getElementById("lock");
+  var lockName = document.getElementById("lockname");
+  var lockMsg = document.getElementById("lockmsg");
+  var lockChg = document.getElementById("lockchg");
+  var lockGo = document.getElementById("lockgo");
+  function lockAsk(force) {
+    if (!force && storedName) {
+      lockMsg.innerHTML = "good to see you, <b>" + storedName + "</b>.<br>no password, just hit enter.";
+      lockName.style.display = "none";
+      lockChg.style.display = "inline-block";
+      lockGo.textContent = "unlock";
+    } else {
+      lockMsg.innerHTML = "this isn't a password. it's a name tag.<br>what should we call you?";
+      lockName.style.display = "block";
+      lockChg.style.display = "none";
+      lockGo.textContent = "enter";
+      lockName.value = storedName;
+    }
+  }
+  lockAsk(false);
+  function unlock() {
+    var n = lockName.value.trim();
+    if (!n && !storedName) { lockName.focus(); return; }
+    if (n && n !== storedName) {
+      storedName = n;
+      localStorage.setItem("kubo_name", n);
+    }
+    lock.style.display = "none";
+    doBoot();
+  }
+  lockGo.onclick = unlock;
+  lockChg.onclick = function () { lockAsk(true); lockName.focus(); };
+  lockName.addEventListener("keydown", function (e) { if (e.key === "Enter") unlock(); });
+  lockName.focus();
+
   /* ============ boot ============ */
-  var bootlines = ["warming up the kernel...", "waking up the apps...", "polishing the pixels...", "almost there...", "done. welcome back."];
-  var bootLine = 0;
-  setTimeout(function () {
+  function doBoot() {
+    var lines = ["warming up the kernel...", "waking up the apps...", "polishing the pixels...", "almost there...", "done. welcome, " + storedName + "."];
+    var boot = document.getElementById("boot");
+    boot.style.display = "flex";
     var bar = document.querySelector("#bootbar i");
     var txt = document.getElementById("boottxt");
-    var p = 0;
+    var p = 0, li = 0;
+    txt.textContent = lines[0];
     var iv = setInterval(function () {
       p += 6 + Math.random() * 16;
-      if (p > 85 && bootLine < bootlines.length - 1) { bootLine = bootlines.length - 1; txt.textContent = bootlines[bootLine]; }
-      else if (p > 55 && bootLine === 0) { bootLine = 1; txt.textContent = bootlines[1]; }
-      else if (p > 30 && bootLine <= 1) { bootLine = 2; txt.textContent = bootlines[2]; }
+      if (p > 30 && li < 1) { li = 1; txt.textContent = lines[1]; }
+      else if (p > 55 && li < 2) { li = 2; txt.textContent = lines[2]; }
+      else if (p > 78 && li < 3) { li = 3; txt.textContent = lines[3]; }
       if (p >= 100) {
         p = 100; clearInterval(iv);
-        txt.textContent = bootlines[4];
-        var boot = document.getElementById("boot");
+        txt.textContent = lines[4];
         boot.style.opacity = "0";
         setTimeout(function () {
           boot.remove();
           if (!localStorage.getItem("kubo_welcomed")) {
             localStorage.setItem("kubo_welcomed", "1");
             openApp("hello");
-            toast("welcome to <b>kubo os</b> 👋 this is yours now");
+            toast("welcome to <b>kubo os</b>, " + storedName + ". this is yours now.");
           }
         }, 600);
       }
       bar.style.width = p + "%";
     }, 100);
-  }, 300);
+  }
 
   /* ============ app: welcome ============ */
   function appHello(body) {
     var h = new Date().getHours();
-    var greet = h < 5 ? "up late, akshat?" : h < 12 ? "good morning, akshat" : h < 17 ? "good afternoon, akshat" : h < 21 ? "good evening, akshat" : "good night, akshat";
+    var greet = h < 5 ? "up late, " + storedName + "?" : h < 12 ? "good morning, " + storedName : h < 17 ? "good afternoon, " + storedName : h < 21 ? "good evening, " + storedName : "good night, " + storedName;
     body.innerHTML = '<div class="hello">' +
-      '<div class="hero"><div class="greet">' + greet + '</div><div class="sub">welcome to your own operating system. built by hand, zero frameworks, one html file. drag windows, open apps, poke around — you break it, you fix it. that\'s the fun part.</div></div>' +
+      '<div class="hero"><div class="greet">' + greet + '</div><div class="sub">i built this os by hand — one html file, zero frameworks, and a questionable amount of 3am energy. windows drag, apps open, the terminal actually works. it is yours now. go poke around and break something.</div></div>' +
       '<div class="tips">' +
-        '<div class="tip"><b>drag everything</b>windows move from the titlebar. throw one at the top edge to maximize.<br><span class="k">tip: double-click a titlebar</span></div>' +
-        '<div class="tip"><b>play with the terminal</b>type <span class="k">neofetch</span>, <span class="k">sudo</span> or <span class="k">joke</span>. it talks back.</div>' +
-        '<div class="tip"><b>notes save themselves</b>type anything, close the window, come back — still there. no save button, no panic.</div>' +
-        '<div class="tip"><b>this is yours now</b>no password, no login, no rules. anyone can test it. that was the whole mission.</div>' +
+        '<div class="tip"><b>drag everything</b>windows move from the top bar. throw one at the top edge and it snaps full screen — double-clicking the bar does the same.<br><span class="k">tip: double-click a titlebar</span></div>' +
+        '<div class="tip"><b>the terminal talks back</b>type <span class="k">neofetch</span>, <span class="k">sudo</span> or <span class="k">joke</span> and see what happens.</div>' +
+        '<div class="tip"><b>notes save themselves</b>type anything, close the window, come back later — still there. no save button, no panic.</div>' +
+        '<div class="tip"><b>no password, remember?</b>the lockscreen only asks your name so the os can say hi back. that is the whole login system.</div>' +
       '</div>' +
       '<div class="acts"><button class="glow" id="w-term">open terminal</button><button id="w-dl">read the devlog</button></div>' +
-      '<div class="foot">kubo os v1.1 · made by akshat with 3am energy</div></div>';
+      '<div class="foot">kubo os v1.2 · made by akshat</div></div>';
     body.querySelector("#w-term").onclick = function () { openApp("term"); };
     body.querySelector("#w-dl").onclick = function () { openApp("devlog"); };
   }
@@ -738,7 +847,7 @@
       cnt.textContent = ta.value.length + " chars";
       if (!timer) {
         timer = setTimeout(function () {
-          toast("note <b>saved</b> ✓");
+          toast("note <b>saved</b>");
           timer = null;
         }, 900);
       }
@@ -812,7 +921,7 @@
       '<span class="ps">kubo@aksh:~$</span><input id="termcmd" autocomplete="off" spellcheck="false" placeholder="type help"></div></div>';
     var out = body.querySelector("#termout");
     var inp = body.querySelector("#termcmd");
-    var BANNER = '<span class="green">KUBO//OS v1.1</span> <span class="dim">| the web os akshat built</span>\nhey, you. yes you. this terminal works. type <span class="cyan">help</span>';
+    var BANNER = '<span class="green">KUBO//OS v1.2</span> <span class="dim">| the web os akshat built</span>\nthis terminal actually works. type <span class="cyan">help</span>';
     print(BANNER);
     function print(html) {
       var d = document.createElement("div");
@@ -834,10 +943,10 @@
         case "help":
           print("commands: <span class='cyan'>help, neofetch, whoami, hi, joke, date, echo, open, clear, sudo, banner</span>");
           break;
-        case "whoami": print("akshat — icse class 10, future ai engineer, certified os builder. you're on his machine now."); break;
+        case "whoami": print("you are " + storedName + " — and you are running an os built from one html file. respect."); break;
         case "hi":
         case "hey":
-        case "hello": print("hey akshat. drink some water. stretch. this os won't run itself — well, actually it does, but still."); break;
+        case "hello": print("hey " + storedName + ". drink some water. stretch. this os won't run itself — well, actually it does, but still."); break;
         case "joke": print("why did the developer go broke?\nbecause he used up all his <span class='gold'>cache</span>. ...i'll see myself out."); break;
         case "date": print(new Date().toString()); break;
         case "clear": out.innerHTML = ""; break;
@@ -853,7 +962,7 @@
           break;
         case "echo": print(a.slice(1).join(" ").replace(/</g, "&lt;") || " "); break;
         case "neofetch":
-          print('<span class="green">user</span>  akshat\n<span class="green">os</span>    KuboOS 1.1 (web build)\n<span class="green">wm</span>    kubo-wm — drag, snap, resize, all vanilla\n<span class="green">shell</span> ksh 1.1\n<span class="green">uptime</span> since you opened the tab\n<span class="green">apps</span>  6 — welcome, notes, calc, terminal, devlog, about\n<span class="green">kernel</span> 100% html + css + js, zero dependencies\n<span class="green">vibe</span>  immaculate');
+          print('<span class="green">user</span>  ' + storedName + '\n<span class="green">os</span>    KuboOS 1.2 (web build)\n<span class="green">wm</span>    kubo-wm — drag, snap, resize, all vanilla\n<span class="green">shell</span> ksh 1.2\n<span class="green">uptime</span> since you unlocked\n<span class="green">apps</span>  6 — welcome, notes, calc, terminal, devlog, about\n<span class="green">kernel</span> 100% html + css + js, zero dependencies\n<span class="green">vibe</span>  immaculate');
           break;
         case "": break;
         default: print("command not found: <span class='pink'>" + cmd.replace(/</g, "&lt;") + "</span> — try <span class='cyan'>help</span>");
@@ -884,17 +993,19 @@
     { ver: "DEVLOG #3", date: "09 aug 2026", title: "polish + extras beyond the guide",
       items: ["boot sequence with animated loading bar that fades into the desktop", "start menu (K button) with app grid", "window <b>resizing</b> from the corner handle, double-click titlebar to maximize", "no password, no login — anyone who opens the page is in. exactly how the mission wanted it"] },
     { ver: "DEVLOG #4", date: "09 aug 2026", title: "the humanise pass (v1.1)",
-      items: ["generated a proper <b>wallpaper</b> — aurora + city lights, with vignette and grid overlay", "new <b>welcome app</b> that greets by time of day (\"good evening, akshat\") and shows on first boot", "<b>toast notifications</b> — \"note saved ✓\" etc, plus custom os-styled dialogs instead of browser confirm()", "windows now <b>animate</b> in, snap to top edge to maximize, drag a maximized window down to restore", "calculator got <b>keyboard support</b> (type to calculate), terminal got <span class='cyan'>joke, hi, kubo</span> commands", "warmer palette, proper fonts, gradient app tiles, friendlier copy everywhere"] }
+      items: ["generated a proper <b>wallpaper</b> — aurora + city lights, with vignette and grid overlay", "<b>toast notifications</b> — \"note saved\", plus custom os-styled dialogs instead of browser confirm()", "windows <b>animate</b> in, snap to top edge to maximize, drag a maximized window down to restore", "calculator got <b>keyboard support</b> (type to calculate), terminal got joke, hi, kubo commands", "warmer palette, proper fonts, gradient app tiles, friendlier copy everywhere"] },
+    { ver: "DEVLOG #5", date: "09 aug 2026", title: "lockscreen + it stops sounding like a robot (v1.2)",
+      items: ["added a <b>lockscreen</b> — the os asks your name, stores it, and greets you with it", "your name shows up in the welcome app, the start menu, the terminal (whoami, neofetch) and the boot line", "killed every emoji, rewrote all the copy so it sounds like a person wrote it, not an ai", "returning users get a one-tap unlock: \"good to see you, [name]. no password, just hit enter.\""] }
   ];
 
   /* ============ app: about ============ */
   function appAbout(body) {
     body.innerHTML = '<div class="about">' +
       '<div class="big">KUBO//OS</div>' +
-      '<span class="ver">v1.1 — a web os, built by akshat. zero frameworks, zero dependencies.</span>' +
+      '<span class="ver">v1.2 — a web os, built by akshat. zero frameworks, zero dependencies.</span>' +
       '<p>this whole thing is <b>one html file</b>. the wallpaper, the window manager, the taskbar, every app — all hand-rolled in plain <b>html, css and vanilla javascript</b>. that was the whole point of the workshop: make it yourself, not install it.</p>' +
-      '<div class="tags"><span class="lm">draggable windows</span><span>snap-to-maximize</span><span>taskbar + clock</span><span>start menu</span><span>notes w/ autosave</span><span>working calculator</span><span>keyboard calc</span><span>terminal</span><span>devlog</span><span>toasts</span><span>custom dialogs</span><span>welcome app</span><span>boot sequence</span></div>' +
-      '<p>how to use: click icons on the desktop (or the K button) to open apps. drag titlebars, resize from corners, double-click to maximize. try <b>neofetch</b> or <b>joke</b> in the terminal. nothing here needs a password — the os trusts you.</p></div>';
+      '<div class="tags"><span class="lm">lockscreen</span><span class="lm">draggable windows</span><span>snap-to-maximize</span><span>taskbar + clock</span><span>start menu</span><span>notes w/ autosave</span><span>working calculator</span><span>keyboard calc</span><span>terminal</span><span>devlog</span><span>toasts</span><span>custom dialogs</span><span>welcome app</span><span>boot sequence</span></div>' +
+      '<p>how to use: the lockscreen asks your name — that is the whole login system. click icons on the desktop (or the K button) to open apps. drag titlebars, resize from corners, double-click to maximize. try <b>neofetch</b> or <b>joke</b> in the terminal. no password anywhere. the os trusts you.</p></div>';
   }
 
   /* ============ resize handling ============ */

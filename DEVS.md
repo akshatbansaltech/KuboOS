@@ -21,7 +21,13 @@
 ## DEVLOG #4 — the humanise pass, v1.1 (09 aug 2026)
 - generated a proper **wallpaper** — aurora + city lights, with vignette and grid overlay
 - new **welcome app** that greets by time of day ("good evening, akshat") and shows on first boot
-- **toast notifications** — "note saved ✓", plus custom os-styled dialogs instead of browser confirm()
+- **toast notifications** — "note saved", plus custom os-styled dialogs instead of browser confirm()
 - windows **animate** in, snap to the top edge to maximize, drag a maximized window down to restore it
 - calculator got **keyboard support** (just type to calculate), terminal got `joke`, `hi`, `kubo` commands
 - warmer palette, proper fonts (Inter + Space Grotesk), gradient app tiles, friendlier copy everywhere
+
+## DEVLOG #5 — lockscreen + it stops sounding like a robot, v1.2 (09 aug 2026)
+- added a **lockscreen** — the os asks your name, stores it, and greets you with it
+- your name shows up in the welcome app, the start menu, the terminal (whoami, neofetch) and the boot line
+- killed every emoji, rewrote all the copy so it sounds like a person wrote it, not an ai
+- returning users get a one-tap unlock: "good to see you, [name]. no password, just hit enter."
