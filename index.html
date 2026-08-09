@@ -437,7 +437,7 @@
     <div><div class="who" id="smwho">hey, there</div><div class="sub">kubo os · v1.3</div></div>
   </div>
   <div id="smgrid"></div>
-  <div id="smfoot">no password, no rules, and i built this with my own hands.</div>
+  <div id="smfoot">no password. no rules. just vibes.</div>
 </div>
 
 <div id="toasts"></div>
@@ -449,11 +449,11 @@
     <div class="lgo">K</div>
     <div class="big">KUBO//OS</div>
     <span class="ver">v1.3 · web os by akshat</span>
-    <div class="msg" id="lockmsg">no password here. just tell me your name<br>so the os knows what to call you.</div>
+    <div class="msg" id="lockmsg">no password fr. just drop ur name<br>and we good.</div>
     <input id="lockname" placeholder="your name" maxlength="24">
     <button id="lockgo">enter</button>
-    <button class="chg" id="lockchg" style="display:none">not you? change name</button>
-    <div class="foot">built in one html file. i am not joking.</div>
+    <button class="chg" id="lockchg" style="display:none">not u? change name</button>
+    <div class="foot">one html file. zero cap.</div>
   </div>
 </div>
 
@@ -734,12 +734,12 @@
   var lockGo = document.getElementById("lockgo");
   function lockAsk(force) {
     if (!force && storedName) {
-      lockMsg.innerHTML = "oh hey, <b>" + storedName + "</b>. missed you.<br>hit enter to get in.";
+      lockMsg.innerHTML = "oh hey, <b>" + storedName + "</b>. missed u fr.<br>hit enter. we good.";
       lockName.style.display = "none";
       lockChg.style.display = "inline-block";
       lockGo.textContent = "unlock";
     } else {
-      lockMsg.innerHTML = "no password here. just tell me your name<br>so the os knows what to call you.";
+      lockMsg.innerHTML = "no password fr. just drop ur name<br>and we good.";
       lockName.style.display = "block";
       lockChg.style.display = "none";
       lockGo.textContent = "enter";
@@ -764,7 +764,7 @@
 
   /* ============ boot ============ */
   function doBoot() {
-    var lines = ["powering up...", "loading apps (5 of them, all hand-made)...", "checking if you still have this page open...", "applying last minute fixes...", "done. sup, " + storedName + "."];
+    var lines = ["powering up...", "loading apps...", "polishing pixels...", "sheesh, almost done...", "sup, " + storedName + "."];
     var boot = document.getElementById("boot");
     boot.style.display = "flex";
     var bar = document.querySelector("#bootbar i");
@@ -785,7 +785,7 @@
           if (!localStorage.getItem("kubo_welcomed")) {
             localStorage.setItem("kubo_welcomed", "1");
             openApp("hello");
-            toast("you're in, <b>" + storedName + "</b>. no password, no nothing. just vibes.");
+            toast("u in, <b>" + storedName + "</b>. no password, no drama. just vibes.");
           }
         }, 600);
       }
@@ -798,15 +798,15 @@
     var h = new Date().getHours();
     var greet = h < 5 ? "up late, " + storedName + "?" : h < 12 ? "good morning, " + storedName : h < 17 ? "good afternoon, " + storedName : h < 21 ? "good evening, " + storedName : "good night, " + storedName;
     body.innerHTML = '<div class="hello">' +
-      '<div class="hero"><div class="greet">' + greet + '</div><div class="sub">i made this whole os in one html file. no react, no frameworks, no nothing. just html, css and js that i typed out myself. the windows drag, the calculator actually calculates, the terminal talks back. comp apps is a school subject and this felt like the natural next step. have fun with it.</div></div>' +
+      '<div class="hero"><div class="greet">' + greet + '</div><div class="sub">a whole os in one html file. windows drag, apps open, terminal talks back. no password, no login, no drama. just vibes.</div></div>' +
       '<div class="tips">' +
-        '<div class="tip"><b>drag windows like a boss</b>throw one at the top of the screen and it goes full screen. double-clicking the bar also works.<br><span class="k">tip: double-click a titlebar</span></div>' +
-        '<div class="tip"><b>the terminal is half fake</b>but the commands are real. try <span class="k">neofetch</span>, <span class="k">sudo</span> or <span class="k">joke</span>.</div>' +
-        '<div class="tip"><b>notes save themselves</b>close the window, come back in a week, your thought is still there. my cpu fan thanks you.</div>' +
-        '<div class="tip"><b>no password. ever.</b>the lockscreen only asks your name. passwords are for people with secrets, or something.</div>' +
+        '<div class="tip"><b>drag windows around</b>throw one at the top edge = full screen. double-click the bar also works.<br><span class="k">tip: double-click a titlebar</span></div>' +
+        '<div class="tip"><b>terminal is real</b>type <span class="k">neofetch</span>, <span class="k">sudo</span> or <span class="k">joke</span>. it responds.</div>' +
+        '<div class="tip"><b>notes save themselves</b>close the app, come back later. thought\'s still there.</div>' +
+        '<div class="tip"><b>no password. ever.</b>lockscreen just asks ur name. that\'s it.</div>' +
       '</div>' +
       '<div class="acts"><button class="glow" id="w-term">open terminal</button></div>' +
-      '<div class="foot">kubo os v1.3 · made by akshat</div></div>';
+      '<div class="foot">kubo os v1.3 · one html file. zero cap.</div></div>';
     body.querySelector("#w-term").onclick = function () { openApp("term"); };
   }
 
@@ -814,10 +814,9 @@
   function appNotes(body) {
     var note = localStorage.getItem("kubo_note") || "";
     body.innerHTML = '<div class="app notes">' +
-      '<div class="appbar"><b>scratchpad</b> · autosaves, promise</div>' +
-      '<textarea placeholder="type whatever. homework notes, os ideas, grocery list. i don\'t judge. saves itself as you type.">' + note.replace(/</g, "&lt;") + "</textarea>" +
-      '<div class="meta"><span id="nbchars">0 chars</span><button id="nbclear">clear everything</button></div></div>';
-    var ta = body.querySelector("textarea");
+      '<div class="appbar"><b>scratchpad</b> · autosaves as u type</div>' +
+      '<textarea placeholder="drop ur thoughts here. saves itself. fr.">' + note.replace(/</g, "&lt;") + "</textarea>" +
+      '<div class="meta"><span id="nbchars">0 chars</span><button id="nbclear">clear everything</button></div></div>';    var ta = body.querySelector("textarea");
     var cnt = body.querySelector("#nbchars");
     var timer = null;
     ta.addEventListener("input", function () {
@@ -832,7 +831,7 @@
     });
     cnt.textContent = ta.value.length + " chars";
     body.querySelector("#nbclear").onclick = function () {
-      ask("wipe the whole scratchpad? there's no undo, be sure.", function () {
+      ask("wipe ur whole scratchpad? no undo, bro.", function () {
         ta.value = "";
         localStorage.setItem("kubo_note", "");
         cnt.textContent = "0 chars";
@@ -899,7 +898,7 @@
       '<span class="ps">kubo@aksh:~$</span><input id="termcmd" autocomplete="off" spellcheck="false" placeholder="type help"></div></div>';
     var out = body.querySelector("#termout");
     var inp = body.querySelector("#termcmd");
-    var BANNER = '<span class="green">KUBO//OS v1.3</span> <span class="dim">| one html file, no react, no chill</span>\ntype <span class="cyan">help</span> and see what this thing can do';
+    var BANNER = '<span class="green">KUBO//OS v1.3</span> <span class="dim">| one html file. zero cap.</span>\ntype <span class="cyan">help</span> fr';
     print(BANNER);
     function print(html) {
       var d = document.createElement("div");
@@ -921,17 +920,17 @@
         case "help":
           print("commands: <span class='cyan'>help, neofetch, whoami, hi, joke, date, echo, open, clear, sudo, banner</span>");
           break;
-        case "whoami": print("you are " + storedName + ", running an os i typed out by hand. wear it like a badge."); break;
+        case "whoami": print("u are " + storedName + ". running a whole os from one html file. built different."); break;
         case "hi":
         case "hey":
-        case "hello": print("hey " + storedName + ". drink water. touch grass. the os will still be here."); break;
-        case "joke": print("why did the developer go broke?\nbecause he used up all his <span class='gold'>cache</span>. anyway, i have 5 more where that came from."); break;
+        case "hello": print("yo " + storedName + ". drink water. touch grass. we good."); break;
+        case "joke": print("why did the developer go broke?\nhe used up all his <span class='gold'>cache</span>. lol."); break;
         case "date": print(new Date().toString()); break;
         case "clear": out.innerHTML = ""; break;
         case "banner": print(BANNER); break;
         case "kubo":
         case "cube": print("the cube is watching. don't worry, it's on your side."); break;
-        case "sudo": print("<span class='pink'>permission denied. this os has no root, and honestly? it's better that way.</span>"); break;
+        case "sudo": print("<span class='pink'>permission denied lol. no root here. u already have everything.</span>"); break;
         case "open":
           var target = a[1] ? a[1].toLowerCase() : "";
           if (target === "notes" || target === "calc" || target === "term" || target === "about" || target === "hello") {
@@ -940,10 +939,10 @@
           break;
         case "echo": print(a.slice(1).join(" ").replace(/</g, "&lt;") || " "); break;
         case "neofetch":
-          print('<span class="green">user</span>  ' + storedName + '\n<span class="green">os</span>    KuboOS 1.3 (web build)\n<span class="green">wm</span>    kubo-wm: drag, snap, resize, all vanilla\n<span class="green">shell</span> ksh 1.3\n<span class="green">uptime</span> since you unlocked\n<span class="green">apps</span>  5. welcome, notes, calc, terminal, about\n<span class="green">kernel</span> 100% html + css + js, zero dependencies\n<span class="green">vibe</span>  caffeinated');
+          print('<span class="green">user</span>  ' + storedName + '\n<span class="green">os</span>    KuboOS 1.3 (web build)\n<span class="green">wm</span>    kubo-wm: drag, snap, resize, all vanilla\n<span class="green">shell</span> ksh 1.3\n<span class="green">uptime</span> since you unlocked\n<span class="green">apps</span>  5. welcome, notes, calc, terminal, about\n<span class="green">kernel</span> 100% html + css + js, zero dependencies\n<span class="green">vibe</span>  no cap');
           break;
         case "": break;
-        default: print("command not found: <span class='pink'>" + cmd.replace(/</g, "&lt;") + "</span>. never heard of it. type <span class='cyan'>help</span> for the real ones");
+        default: print("nah, that's not a command. type <span class='cyan'>help</span>");
       }
       inp.focus();
     }
@@ -954,10 +953,10 @@
   function appAbout(body) {
     body.innerHTML = '<div class="about">' +
       '<div class="big">KUBO//OS</div>' +
-      '<span class="ver">v1.3. a web os, built by akshat. one html file, nothing else.</span>' +
-      '<p>i am akshat, class 10, and i built this instead of touching grass. every pixel of this thing was typed by hand into <b>one html file</b> — no framework, no template. the window manager, the calculator, the terminal, even the lockscreen. it\'s rough in places. that\'s the point.</p>' +
+      '<span class="ver">v1.3. one html file. zero frameworks. zero cap.</span>' +
+      '<p>a whole os that runs in ur browser. draggable windows, taskbar, clock, start menu. notes that save themselves. a calculator that actually works. a terminal that talks back. no password. just vibes.</p>' +
       '<div class="tags"><span class="lm">lockscreen</span><span class="lm">draggable windows</span><span>snap-to-maximize</span><span>taskbar + clock</span><span>start menu</span><span>notes w/ autosave</span><span>working calculator</span><span>keyboard calc</span><span>terminal</span><span>toasts</span><span>custom dialogs</span><span>welcome app</span><span>boot sequence</span></div>' +
-      '<p>how to use: click the icons on the desktop or hit the K button. drag titlebars, resize from corners, double-click to maximize. type <b>neofetch</b> in the terminal and feel like a hacker. if something breaks, refresh the page and pretend it never happened.</p></div>';
+      '<p>how to use: click icons or hit the K button. drag titlebars, resize corners, double-click to maximize. type <b>neofetch</b> in the terminal. something breaks? refresh. act like it never happened.</p></div>';
   }
 
   /* ============ resize handling ============ */
